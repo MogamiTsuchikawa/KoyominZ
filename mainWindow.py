@@ -12,9 +12,17 @@ class Button01(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        btn1 = QPushButton("Button01", self)
-        btn1.clicked.connect(self.button01Clicked)
+        
 
+        btns = []
+        i = 0
+
+        while i<2:
+            btns.append(QPushButton("Btn"+str(i), self))
+            btns[i].setText("Btn"+str(i))
+            btns[i].move(20 + 90*i,40)
+            i+=1
+        
         self.statusBar()
 
         self.setWindowTitle('Button01')
