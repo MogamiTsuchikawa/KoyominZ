@@ -10,5 +10,12 @@
             "positionY":0,
             "text":"btn1"
         }
+    },
+    "TextBox":{
+        "textbox1":{
+            "positionX":0,
+            "positionY":20,
+            "text":"sample"
+        }
     }
 }
