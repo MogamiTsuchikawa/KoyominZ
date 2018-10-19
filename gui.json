@@ -1,0 +1,14 @@
+{
+    "Button":{
+        "btn":{
+            "positionX":0,
+            "positionY":0,
+            "text":"btn"
+        },
+        "btn1":{
+            "positionX":100,
+            "positionY":0,
+            "text":"btn1"
+        }
+    }
+}
