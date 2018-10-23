@@ -6,6 +6,8 @@ class Main(wx.Frame):
         panel = wx.Panel(self, wx.ID_ANY)
         textbox = wx.TextCtrl(panel,-1)
         textbox.SetBackgroundColour("white")
+        label = wx.StaticText(panel,-1,"TEST",pos=(0,20))
+        checkbox = wx.CheckBox(panel,-1,"TEST",pos=(0,40))
 app = wx.App(False)
 frame = Main(None, "MouseEvents")
 frame.Show()

@@ -5,6 +5,7 @@ ui_d = json.load(f)
 DW_panel = None
 btn =[]
 textbox = []
+label = []
 
 
 class DesignWindow(wx.Frame):
@@ -30,6 +31,12 @@ class DesignWindow(wx.Frame):
             textbox[i].Bind(wx.EVT_LEFT_DOWN,self.Left_Down)
             textbox[i].Bind(wx.EVT_RIGHT_DOWN,self.Right_Down)
             i+=1
+        i=0
+        for b in ui_d["Label"]:
+            label_b = ui_d["Label"][b]
+            label.append(wx.StaticText(DW_panel,-1,label=label_b["text"],pos=(label_b["positionX"],label_b["positionY"])))
+            i += 1
+        
         DW_panel.Bind(wx.EVT_MOTION,self.OnMouseMove) 
         #btn[0].Bind(wx.EVT_BUTTON,self.btn_Clicked)
     

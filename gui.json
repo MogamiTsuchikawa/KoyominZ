@@ -17,5 +17,19 @@
             "positionY":20,
             "text":"sample"
         }
+    },
+    "Label":{
+        "label1":{
+            "positionX":0,
+            "positionY":40,
+            "text":"sample"
+        }
+    },
+    "CheckBox":{
+        "checkbox1":{
+            "positionX":0,
+            "positionY":60,
+            "text":"sample"
+        }
     }
 }
