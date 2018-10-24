@@ -6,7 +6,7 @@ DW_panel = None
 btn =[]
 textbox = []
 label = []
-
+checkbox = []
 
 class DesignWindow(wx.Frame):
     
@@ -35,6 +35,15 @@ class DesignWindow(wx.Frame):
         for b in ui_d["Label"]:
             label_b = ui_d["Label"][b]
             label.append(wx.StaticText(DW_panel,-1,label=label_b["text"],pos=(label_b["positionX"],label_b["positionY"])))
+            label[i].Bind(wx.EVT_LEFT_DOWN,self.Left_Down)
+            label[i].Bind(wx.EVT_RIGHT_DOWN,self.Right_Down)
+            i += 1
+        i=0
+        for b in ui_d["CheckBox"]:
+            checkbox_b = ui_d["CheckBox"][b]
+            checkbox.append(wx.StaticText(DW_panel,-1,label=checkbox_b["text"],pos=(checkbox_b["positionX"],checkbox_b["positionY"])))
+            checkbox[i].Bind(wx.EVT_LEFT_DOWN,self.Left_Down)
+            checkbox[i].Bind(wx.EVT_RIGHT_DOWN,self.Right_Down)
             i += 1
         
         DW_panel.Bind(wx.EVT_MOTION,self.OnMouseMove) 
