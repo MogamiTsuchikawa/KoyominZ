@@ -9,49 +9,35 @@ label = []
 checkbox = []
 
 class DesignWindow(wx.Frame):
-    
     def __init__(self, parent, title):
-        self.hoge1=1
-        self.hoge2=2
+        def Set_UI(Target_UIkind,Target_UIs):
+            i = 0
+            for b in ui_d[Target_UIkind]:
+                T_UI_b = ui_d[Target_UIkind][b]
+                if Target_UIkind == "Button":
+                    Target_UIs.append(wx.Button(DW_panel,-1,label=T_UI_b["text"],pos=(T_UI_b["positionX"],T_UI_b["positionY"])))
+                elif Target_UIkind == "TextBox":
+                    Target_UIs.append(wx.TextCtrl(DW_panel,-1,pos=(T_UI_b["positionX"],T_UI_b["positionY"])))
+                elif Target_UIkind == "Label":
+                    Target_UIs.append(wx.StaticText(DW_panel,-1,label=T_UI_b["text"],pos=(T_UI_b["positionX"],T_UI_b["positionY"])))
+                elif Target_UIkind == "CheckBox":
+                    Target_UIs.append(wx.CheckBox(DW_panel,-1,label=T_UI_b["text"],pos=(T_UI_b["positionX"],T_UI_b["positionY"])))
+                Target_UIs[i].Bind(wx.EVT_LEFT_DOWN,self.Left_Down)
+                Target_UIs[i].Bind(wx.EVT_RIGHT_DOWN,self.Right_Down)
+                i+=1
+            
         wx.Frame.__init__(self, parent, title=title)
         DW_panel = wx.Panel(self, wx.ID_ANY)
-        i = 0
-        for b in ui_d["Button"]:
-            #print(ui_d["Button"][b])
-            btn_b = ui_d["Button"][b]
-            btn.append(wx.Button(DW_panel,-1,label=btn_b["text"],pos=(btn_b["positionX"],btn_b["positionY"])))
-            btn[i].Bind(wx.EVT_LEFT_DOWN,self.Left_Down)
-            btn[i].Bind(wx.EVT_RIGHT_DOWN,self.Right_Down)
-            i+=1
-        i = 0
-        for b in ui_d["TextBox"]:
-            #print(ui_d["TextBox"][b])
-            textbox_b = ui_d["TextBox"][b]
-            textbox.append(wx.TextCtrl(DW_panel,-1,pos=(textbox_b["positionX"],textbox_b["positionY"])))
-            textbox[i].Bind(wx.EVT_LEFT_DOWN,self.Left_Down)
-            textbox[i].Bind(wx.EVT_RIGHT_DOWN,self.Right_Down)
-            i+=1
-        i=0
-        for b in ui_d["Label"]:
-            label_b = ui_d["Label"][b]
-            label.append(wx.StaticText(DW_panel,-1,label=label_b["text"],pos=(label_b["positionX"],label_b["positionY"])))
-            label[i].Bind(wx.EVT_LEFT_DOWN,self.Left_Down)
-            label[i].Bind(wx.EVT_RIGHT_DOWN,self.Right_Down)
-            i += 1
-        i=0
-        for b in ui_d["CheckBox"]:
-            checkbox_b = ui_d["CheckBox"][b]
-            checkbox.append(wx.StaticText(DW_panel,-1,label=checkbox_b["text"],pos=(checkbox_b["positionX"],checkbox_b["positionY"])))
-            checkbox[i].Bind(wx.EVT_LEFT_DOWN,self.Left_Down)
-            checkbox[i].Bind(wx.EVT_RIGHT_DOWN,self.Right_Down)
-            i += 1
+        Ctrls = {"Button":btn,"TextBox":textbox,"Label":label,"CheckBox":checkbox}
+        for Ctrl_t in Ctrls:
+            Set_UI(Ctrl_t,Ctrls[Ctrl_t])
+        
         
         DW_panel.Bind(wx.EVT_MOTION,self.OnMouseMove) 
         #btn[0].Bind(wx.EVT_BUTTON,self.btn_Clicked)
     
     def Left_Down(self,event):
-        print(self.hoge1)
-        print(self.hoge2)
+        
         global DW_panel
         global Move_Object
         Clicked_Object = event.GetEventObject()

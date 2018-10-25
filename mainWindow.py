@@ -18,8 +18,6 @@ class MainWindow(wx.Frame):
         Sub_Window_ID = Sub_Window.Show()
         t = threading.Thread(target=Change_StaBar)
         t.start()
-        #loop = asyncio.get_event_loop()
-        #loop.run_until_complete(asyncio.gather(Change_StaBar(self)))
 
 app = wx.App(False)
 frame = MainWindow(None, "MouseEvents")
