@@ -31,5 +31,19 @@
             "positionY":60,
             "text":"sample"
         }
+    },
+    "ComboBox":{
+        "combobox1":{
+            "positionX":0,
+            "positionY":80,
+            "text":"sample"
+        }
+    },
+    "ProgressBar":{
+        "progressbar1":{
+            "positionX":0,
+            "positionY":100,
+            "text":"sample"
+        }
     }
 }
