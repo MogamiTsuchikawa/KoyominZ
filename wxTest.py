@@ -1,4 +1,4 @@
-import wx
+import wx,wx.grid
 
 class Main(wx.Frame):
     def __init__(self, parent, title):
@@ -10,6 +10,10 @@ class Main(wx.Frame):
         checkbox = wx.CheckBox(panel,-1,"TEST",pos=(0,40))
         btn= wx.Button(panel,-1)
         btn.Label = "hello"
+        t_grid = wx.grid.Grid(self)
+        t_grid.Size = (200,200)
+        t_grid.CreateGrid(1,1)
+        t_grid.AppendRows(2)
 app = wx.App(False)
 frame = Main(None, "MouseEvents")
 frame.Show()

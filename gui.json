@@ -42,8 +42,7 @@
     "ProgressBar":{
         "progressbar1":{
             "positionX":0,
-            "positionY":100,
-            "text":"sample"
+            "positionY":100
         }
     }
 }
