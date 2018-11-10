@@ -30,7 +30,7 @@ class MainWindow(wx.Frame):
         self.CtrlInfoGrid.CreateGrid(1, 1)
         self.CtrlInfoGrid.Position = (210, 20)
         self.CtrlInfoGrid.Size = (200, 400)
-        #self.Bind(wx.grid.EVT_GRID_CELL_LEFT_CLICK,self.CtrlInfoGrid_Clicked(),self.CtrlInfoGrid)
+        #self.CtrlInfoGrid.Bind(wx.grid.EVT_GRID_CMD_CELL_LEFT_CLICK,self.CtrlInfoGrid_Clicked())
 
     def btn_click(self, i):
         self.Sub_Window.ChangeCtrlValue("Button", "btn1", "text", "Clicked")
@@ -95,7 +95,7 @@ class MainWindow(wx.Frame):
                             else:
                                 need_len = row_len - d_len
                                 self.CtrlInfoGrid.DeleteRows(need_len)
-                    self.CtrlInfoGrid.Bind(wx.grid.EVT_GRID_CELL_CHANGED,self.CtrlInfoGrid_Clicked())
+                    #self.CtrlInfoGrid.Bind(wx.grid.EVT_GRID_CELL_CHANGED,self.CtrlInfoGrid_Clicked())
                     self.CtrlInfoGrid.SetColSize(0, 50)
                     count = 0
                     for PropKind in ClickedItem_d:
