@@ -1,6 +1,4 @@
-import wx
-import copy
-import json
+import wx,copy,json
 
 
 class DesignWindow(wx.Frame):
@@ -24,8 +22,7 @@ class DesignWindow(wx.Frame):
 
         wx.Frame.__init__(self, parent, title=title)
         self.DW_panel = wx.Panel(self, wx.ID_ANY)
-        Ctrls = {"Button": self.btn, "TextBox": self.textbox, "Label": self.label,
-                 "CheckBox": self.checkbox, "ComboBox": self.combobox, "ProgressBar": self.progressbar}
+        Ctrls = {"Button": self.btn, "TextBox": self.textbox, "Label": self.label,"CheckBox": self.checkbox, "ComboBox": self.combobox, "ProgressBar": self.progressbar}
         for Ctrl_t in Ctrls:
             self.Set_UI(Ctrl_t, Ctrls[Ctrl_t])
 
