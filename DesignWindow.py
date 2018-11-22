@@ -1,7 +1,8 @@
-import wx,copy,json
+import wx,copy,json,numba
 
 
 class DesignWindow(wx.Frame):
+    @numba.jit
     def __init__(self, parent, title):
         self.Move_Object = None
         self.f = open("gui.json", 'r')
@@ -28,7 +29,7 @@ class DesignWindow(wx.Frame):
 
         self.DW_panel.Bind(wx.EVT_MOTION, self.OnMouseMove)
         # btn[0].Bind(wx.EVT_BUTTON,self.btn_Clicked)
-
+    @numba.jit
     def Set_UI(self,Target_UIkind, Target_UIs):
         i = 0
         for b in self.ui_d[Target_UIkind]:

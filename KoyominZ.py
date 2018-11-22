@@ -1,14 +1,15 @@
-import wx,json,copy,asyncio,threading,wx.grid
+import wx,json,copy,asyncio,threading,wx.grid,numba
 import DesignWindow
 StaBar = None
 
 class MainWindow(wx.Frame):
+    @numba.jit
     def __init__(self, parent, title):
         self.window_list = ["gui"]
         wx.Frame.__init__(self, parent, title=title)
         self.SetSize(500, 600)
         panel = wx.Panel(self, wx.ID_ANY)
-        #
+        #MenuBar追加処理
         menu_bar_items = []
         menu_bar = wx.MenuBar()
         self.menu_bar_file = wx.Menu()
@@ -48,7 +49,7 @@ class MainWindow(wx.Frame):
 
     def btn_click(self, i):
         self.Sub_Window.ChangeCtrlValue("Button", "btn1", "text", "Clicked")
-
+    @numba.jit
     def SetCtrlList(self, ctrllist):
         self.cl_root = ctrllist.AddRoot("Windows")
         self.cl_d = []
@@ -75,7 +76,7 @@ class MainWindow(wx.Frame):
                         self.cl_d[ctrl_i], ctrl_name))
                     self.cl_names.append({win_name, ui, ctrl_name})
                     i += 1
-
+    @numba.jit
     def CtrlList_Clicked(self, event):
         ClickedItem_Name = self.CtrlList.GetItemText(event.GetItem())
         print(ClickedItem_Name)
