@@ -1,4 +1,5 @@
 import wx,wx.grid
+import convert
 
 class Main(wx.Frame):
     def __init__(self, parent, title):
@@ -28,5 +29,9 @@ class Main(wx.Frame):
 app = wx.App(False)
 frame = Main(None, "MouseEvents")
 frame.Show()
+
+conv = convert.Convert("gui.json","TEST")
+
+
 
 app.MainLoop()
