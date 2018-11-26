@@ -1,7 +1,8 @@
 import wx,time,json,numba,xmltodict
 import xml.etree.ElementTree as ET
+import const
 #指定されたコントロールの種類の全部のプロパティを生成
-@numba.jit
+#@numba.jit
 def MakeCtrlProps_CS(ui_d, kind):
     output = ""
     ui_d_a = ui_d[kind]
@@ -13,9 +14,9 @@ def MakeCtrlProps_CS(ui_d, kind):
             rtn = GetProp_CS(prop_kind, target)
             if rtn != "\n":
                 output = output + "            this.%s"%ctrlname + rtn
-        return output
+    return output
 #指定されたコントロールのプロパティを生成、MakeCtrlPropsメソッドが利用するメソッド
-@numba.jit
+#@numba.jit
 def GetProp_CS(prop_kind, target):
     rtn = ""
     if prop_kind == "positionX":
@@ -30,7 +31,7 @@ def GetProp_CS(prop_kind, target):
     rtn += "\n"
     return rtn
 #コントロールの宣言部分
-@numba.jit
+#@numba.jit
 def Defin_Ctrls_CS(ui_d):
     rtn = ""
     for ctrl_kind in ui_d:
@@ -40,15 +41,11 @@ def Defin_Ctrls_CS(ui_d):
     return rtn
 
 #JSONで管理している名前と違ってもいいようにここでC#での名前に変換する
-@numba.jit
+#@numba.jit
 def Get_ctrl_kind_t_CS(ctrl_kind):
     rtn = ""
-    UIs = ["Button", "TextBox", "Label",
-               "CheckBox", "ComboBox", "ProgressBar"]
-    i = UIs.index(ctrl_kind)
-    UIs_t_CS = ["Button", "TextBox", "Label",
-               "CheckBox", "ComboBox", "ProgressBar"]
-    rtn = UIs_t_CS[i]
+    i = const.UIs.index(ctrl_kind)
+    rtn = const.UIs_t_CS[i]
     return rtn
 class Convert():
     def __init__(self, target_file, project_name):
@@ -73,9 +70,7 @@ class Convert():
         {
             \n""" % (project_name, target_window_name)
 
-        UIs = {"Button", "TextBox", "Label",
-               "CheckBox", "ComboBox", "ProgressBar"}
-        for kind in UIs:
+        for kind in const.UIs:
             wo += MakeCtrlProps_CS(self.ui_d, kind)
         wo += "        }\n"
         wo += Defin_Ctrls_CS(self.ui_d)
@@ -88,4 +83,3 @@ class Convert():
         self.endtime = time.time()
         print(self.endtime - self.starttime)
         print("Convert FINISHED!")
-        

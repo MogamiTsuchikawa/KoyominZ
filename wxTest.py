@@ -30,8 +30,6 @@ app = wx.App(False)
 frame = Main(None, "MouseEvents")
 frame.Show()
 
-conv = convert.Convert("gui.json","TEST")
-
-
+#conv = convert.Convert("gui.json","TEST")
 
 app.MainLoop()

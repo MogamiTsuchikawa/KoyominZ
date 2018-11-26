@@ -1,10 +1,12 @@
 import wx,copy,json,numba
+import const
 
 
 class DesignWindow(wx.Frame):
     @numba.jit
     def __init__(self, parent, title):
         self.Move_Object = None
+        self.Move_Object_Pos = None
         self.f = open("gui.json", 'r')
         self.ui_d = json.load(self.f)
         self.DW_panel = None
@@ -23,9 +25,10 @@ class DesignWindow(wx.Frame):
 
         wx.Frame.__init__(self, parent, title=title)
         self.DW_panel = wx.Panel(self, wx.ID_ANY)
-        Ctrls = {"Button": self.btn, "TextBox": self.textbox, "Label": self.label,"CheckBox": self.checkbox, "ComboBox": self.combobox, "ProgressBar": self.progressbar}
-        for Ctrl_t in Ctrls:
-            self.Set_UI(Ctrl_t, Ctrls[Ctrl_t])
+        self.Ctrls = {"Button": self.btn, "TextBox": self.textbox, "Label": self.label,"CheckBox": self.checkbox, "ComboBox": self.combobox, "ProgressBar": self.progressbar}
+        self.Ctrls_Name = {"Button": self.btn_name, "TextBox": self.textbox_name, "Label": self.label_name,"CheckBox": self.checkbox_name, "ComboBox": self.combobox_name, "ProgressBar": self.progressbar_name}
+        for Ctrl_t in self.Ctrls:
+            self.Set_UI(Ctrl_t, self.Ctrls[Ctrl_t])
 
         self.DW_panel.Bind(wx.EVT_MOTION, self.OnMouseMove)
         # btn[0].Bind(wx.EVT_BUTTON,self.btn_Clicked)
@@ -36,7 +39,7 @@ class DesignWindow(wx.Frame):
             T_UI_b = self.ui_d[Target_UIkind][b]
             if Target_UIkind == "Button":
                 Target_UIs.append(wx.Button(
-                    self.DW_panel, -1, label=T_UI_b["text"], pos=(T_UI_b["positionX"], T_UI_b["positionY"])))
+                    self.DW_panel, -1,label=T_UI_b["text"], pos=(T_UI_b["positionX"], T_UI_b["positionY"])))
                 self.btn_name.append(b)
             elif Target_UIkind == "TextBox":
                 Target_UIs.append(wx.TextCtrl(
@@ -65,26 +68,41 @@ class DesignWindow(wx.Frame):
     def Left_Down(self, event):
 
         Clicked_Object = event.GetEventObject()
+        
         # print(Clicked_Object)
         if self.Move_Object is None:
             self.Move_Object = Clicked_Object
             # SetStatusText("移動中")
         elif self.Move_Object == Clicked_Object:
+            ctrl_name =""
+            t_index = -1
+            for ctrl_kind in const.UIs:
+                ctrls = self.Ctrls[ctrl_kind]
+                for index in range(len(ctrls)-1):
+                    if Clicked_Object == ctrls[index]:
+                        t_index = index
+                if t_index != -1:
+                    ctrls_name_object = self.Ctrls_Name[ctrl_kind]
+                    ctrl_name = ctrls_name_object[t_index]
+                    print(ctrl_name)
+                    self.ui_d[ctrl_kind][ctrl_name]["positionX"]=self.Move_Object_Pos[0]
+                    self.ui_d[ctrl_kind][ctrl_name]["positionY"]=self.Move_Object_Pos[1]
+                    
             self.Move_Object = None
+            
             # Show_StBar()
 
     def Right_Down(self, event):
         Clicked_Object = event.GetEventObject()
 
     def OnMouseMove(self, event):
-
         pos = event.GetPosition()
         self.SetTitle('OnMouseMove' + str(pos))
-
         if self.Move_Object is not None:
             # print(Move_Object)
             self.Move_Object.SetPosition(pos)
-
+            self.Move_Object_Pos = pos
+            
     def ChangeCtrlValue(self, Target_UI_kind, Target_UI_name, Change_Kind, Change_Value):
         if Target_UI_kind == "Button":
             index = self.btn_name.index(Target_UI_name)
@@ -93,3 +111,9 @@ class DesignWindow(wx.Frame):
                 target_UI_o.Label = Change_Value
                 print(Change_Value)
                 print(target_UI_o)
+    
+    def Save(self):
+
+        f = open("gui.json",'w')
+        json.dump(self.ui_d,f,indent=4)
+        f.close()

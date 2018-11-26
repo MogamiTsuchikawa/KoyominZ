@@ -1,48 +1,48 @@
 {
-    "Button":{
-        "btn":{
-            "positionX":0,
-            "positionY":0,
-            "text":"btn"
+    "Button": {
+        "btn": {
+            "positionX": 0,
+            "positionY": 0,
+            "text": "btn"
         },
-        "btn1":{
-            "positionX":100,
-            "positionY":0,
-            "text":"btn1"
+        "btn1": {
+            "positionX": 140,
+            "positionY": 170,
+            "text": "btn1"
         }
     },
-    "TextBox":{
-        "textbox1":{
-            "positionX":0,
-            "positionY":20,
-            "text":"sample"
+    "TextBox": {
+        "textbox1": {
+            "positionX": 0,
+            "positionY": 20,
+            "text": "sample"
         }
     },
-    "Label":{
-        "label1":{
-            "positionX":0,
-            "positionY":40,
-            "text":"sample"
+    "Label": {
+        "label1": {
+            "positionX": 0,
+            "positionY": 40,
+            "text": "sample"
         }
     },
-    "CheckBox":{
-        "checkbox1":{
-            "positionX":0,
-            "positionY":60,
-            "text":"sample"
+    "CheckBox": {
+        "checkbox1": {
+            "positionX": 0,
+            "positionY": 60,
+            "text": "sample"
         }
     },
-    "ComboBox":{
-        "combobox1":{
-            "positionX":0,
-            "positionY":80,
-            "text":"sample"
+    "ComboBox": {
+        "combobox1": {
+            "positionX": 0,
+            "positionY": 80,
+            "text": "sample"
         }
     },
-    "ProgressBar":{
-        "progressbar1":{
-            "positionX":0,
-            "positionY":100
+    "ProgressBar": {
+        "progressbar1": {
+            "positionX": 0,
+            "positionY": 100
         }
     }
 }

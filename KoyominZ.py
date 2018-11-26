@@ -1,40 +1,48 @@
 import wx,json,copy,asyncio,threading,wx.grid,numba
-import DesignWindow
-StaBar = None
+import DesignWindow,const,convert
 
 class MainWindow(wx.Frame):
-    @numba.jit
+    #@numba.jit
     def __init__(self, parent, title):
         self.window_list = ["gui"]
         wx.Frame.__init__(self, parent, title=title)
         self.SetSize(500, 600)
         panel = wx.Panel(self, wx.ID_ANY)
         #MenuBar追加処理
-        menu_bar_items = []
         menu_bar = wx.MenuBar()
-        self.menu_bar_file = wx.Menu()
-        menu_bar_items_i = 0
-        for m_text in {"NewFile","OpenFile"}:
-            menu_bar_items.append(wx.MenuItem(self.menu_bar_file,wx.ID_NEW,text=m_text,kind=wx.ITEM_NORMAL))
-            menu_bar_items[menu_bar_items_i].SetBitmap(wx.Bitmap("res/icon/"+m_text+".png"))
-            self.menu_bar_file.Append(menu_bar_items[menu_bar_items_i])
-            menu_bar_items_i += 1
-        
-        self.menu_bar_edit = wx.Menu()
-        for m_text in {"Cut","Copy","Paste"}:
-            menu_bar_items.append(wx.MenuItem(self.menu_bar_file,wx.ID_NEW,text=m_text,kind=wx.ITEM_NORMAL))
-            menu_bar_items[menu_bar_items_i].SetBitmap(wx.Bitmap("res/icon/"+m_text+".png"))
-            self.menu_bar_edit.Append(menu_bar_items[menu_bar_items_i])
-            menu_bar_items_i += 1
-        menu_bar.Append(self.menu_bar_file,"File")
-        menu_bar.Append(self.menu_bar_edit,"Edit")
+        menu_items = []
+        menu_items_i = 0
+        #FILE MENU
+        menu_file = wx.Menu()
+        for m_text in ["New","Open","Save","Save As"]:
+            menu_items.append(wx.MenuItem(menu_file,menu_items_i+1,m_text))
+            menu_file.AppendItem(menu_items[menu_items_i])
+            menu_items_i +=1
+        #EDIT MENU
+        menu_edit = wx.Menu()
+        for m_text in ["Cut","Copy","Paste"]:
+            menu_items.append(wx.MenuItem(menu_edit,menu_items_i+1,m_text))
+            menu_edit.AppendItem(menu_items[menu_items_i])
+            menu_items_i +=1
+        #MAKE MENU
+        menu_make = wx.Menu()
+        for m_text in ["MakeCS","Build"]:
+            menu_items.append(wx.MenuItem(menu_make,menu_items_i+1,m_text))
+            menu_make.AppendItem(menu_items[menu_items_i])
+            menu_items_i +=1
+        menu_bar.Append(menu_file,"File")
+        menu_bar.Append(menu_edit,"Edit")
+        menu_bar.Append(menu_make,"Make")
         self.SetMenuBar(menu_bar)
+        #menu_bar_items[menu_bar_items_i].Bind(wx.EVT_MENU,self.Menu_Make_Clicked)
+        self.Bind(wx.EVT_MENU,self.Menu_Clicked)
 
         #self.Show(True)
         #
         StaBar = self.CreateStatusBar()
-        self.Sub_Window = DesignWindow.DesignWindow(self, "MousePoint")
-        Sub_Window_ID = self.Sub_Window.Show()
+        #デザインウインドウの表示
+        self.Preview_Window = DesignWindow.DesignWindow(self, "MousePoint")
+        self.Preview_Window_ID = self.Preview_Window.Show()
         btn = wx.Button(panel, -1,pos=(50,600))
         btn.Bind(wx.EVT_LEFT_DOWN, self.btn_click)
         self.CtrlList = wx.TreeCtrl(panel, -1, pos=(0, 20))
@@ -49,7 +57,6 @@ class MainWindow(wx.Frame):
 
     def btn_click(self, i):
         self.Sub_Window.ChangeCtrlValue("Button", "btn1", "text", "Clicked")
-    @numba.jit
     def SetCtrlList(self, ctrllist):
         self.cl_root = ctrllist.AddRoot("Windows")
         self.cl_d = []
@@ -57,16 +64,14 @@ class MainWindow(wx.Frame):
         i = 0
         win_i = 0
         for win_name in self.window_list:
-
             self.cl_d.append(ctrllist.AppendItem(self.cl_root, win_name))
             self.cl_names.append({win_name, "Window", win_name})
             win_i = i
             i += 1
             f = open(win_name+".json")
             ui_d = json.load(f)
-            UIs = {"Button", "TextBox", "Label","CheckBox", "ComboBox", "ProgressBar"}
             ctrl_i = 0
-            for ui in UIs:
+            for ui in const.UIs:
                 self.cl_d.append(ctrllist.AppendItem(self.cl_d[win_i], ui))
                 self.cl_names.append({ui+".root", "root"})
                 ctrl_i = i
@@ -76,7 +81,7 @@ class MainWindow(wx.Frame):
                         self.cl_d[ctrl_i], ctrl_name))
                     self.cl_names.append({win_name, ui, ctrl_name})
                     i += 1
-    @numba.jit
+    #@numba.jit
     def CtrlList_Clicked(self, event):
         ClickedItem_Name = self.CtrlList.GetItemText(event.GetItem())
         print(ClickedItem_Name)
@@ -121,10 +126,54 @@ class MainWindow(wx.Frame):
                 # 選択した物はウインドウの名前
                 # ウインドウの情報を表示
                 a = 1
-
-        
     def CtrlInfoGrid_Clicked(self,event):
         print("Clicked")
+
+    #MenuのMakeがクリックされたときに呼び出し
+    def Menu_Clicked(self,event):
+        Menu_No = event.GetId()
+        print(Menu_No)
+        if Menu_No == 1:
+            self.File_New_Clicked()
+        elif Menu_No == 2:
+            self.File_Open_Clicked()
+        elif Menu_No == 3:
+            self.File_Save_Clicked()
+        elif Menu_No == 4:
+            self.File_SaveAs_Clicked()
+        elif Menu_No == 5:
+            self.Edit_Cut_Clicked()
+        elif Menu_No == 6:
+            self.Edit_Copy_Clicked()
+        elif Menu_No == 7:
+            self.Edit_Paste_Clicked()
+        elif Menu_No == 8:
+            self.Make_MakeCS_Clicked()
+        elif Menu_No == 9:
+            self.Make_Build_Clicked()
+    
+    def File_New_Clicked(self):
+        pass
+    def File_Open_Clicked(self):
+        pass
+    def File_Save_Clicked(self):
+        #f = open("gui.json",'w')
+        #json.dump(self.Preview_Window.ui_d,f,indent=4)
+        self.Preview_Window.Save()
+    def File_SaveAs_Clicked(self):
+        pass
+    def Edit_Cut_Clicked(self):
+        pass
+    def Edit_Copy_Clicked(self):
+        pass
+    def Edit_Paste_Clicked(self):
+        pass
+    def Make_MakeCS_Clicked(self):
+        conv = convert.Convert("gui.json","TEST")
+    def Make_Build_Clicked(self):
+        pass
+
+    
 
 
 app = wx.App(False)
