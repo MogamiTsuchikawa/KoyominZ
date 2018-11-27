@@ -1,9 +1,7 @@
 import wx,copy,json,numba
 import const
 
-
 class DesignWindow(wx.Frame):
-    @numba.jit
     def __init__(self, parent, title):
         self.Move_Object = None
         self.Move_Object_Pos = None
@@ -31,8 +29,6 @@ class DesignWindow(wx.Frame):
             self.Set_UI(Ctrl_t, self.Ctrls[Ctrl_t])
 
         self.DW_panel.Bind(wx.EVT_MOTION, self.OnMouseMove)
-        # btn[0].Bind(wx.EVT_BUTTON,self.btn_Clicked)
-    @numba.jit
     def Set_UI(self,Target_UIkind, Target_UIs):
         i = 0
         for b in self.ui_d[Target_UIkind]:
@@ -78,19 +74,17 @@ class DesignWindow(wx.Frame):
             t_index = -1
             for ctrl_kind in const.UIs:
                 ctrls = self.Ctrls[ctrl_kind]
-                for index in range(len(ctrls)-1):
+                for index in range(len(ctrls)):
                     if Clicked_Object == ctrls[index]:
                         t_index = index
                 if t_index != -1:
                     ctrls_name_object = self.Ctrls_Name[ctrl_kind]
                     ctrl_name = ctrls_name_object[t_index]
                     print(ctrl_name)
-                    self.ui_d[ctrl_kind][ctrl_name]["positionX"]=self.Move_Object_Pos[0]
-                    self.ui_d[ctrl_kind][ctrl_name]["positionY"]=self.Move_Object_Pos[1]
-                    
+                    self.ui_d[ctrl_kind][ctrl_name]["positionX"] = self.Move_Object_Pos[0]
+                    self.ui_d[ctrl_kind][ctrl_name]["positionY"] = self.Move_Object_Pos[1]
+                    t_index = -1
             self.Move_Object = None
-            
-            # Show_StBar()
 
     def Right_Down(self, event):
         Clicked_Object = event.GetEventObject()
@@ -99,7 +93,6 @@ class DesignWindow(wx.Frame):
         pos = event.GetPosition()
         self.SetTitle('OnMouseMove' + str(pos))
         if self.Move_Object is not None:
-            # print(Move_Object)
             self.Move_Object.SetPosition(pos)
             self.Move_Object_Pos = pos
             

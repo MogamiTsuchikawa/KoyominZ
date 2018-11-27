@@ -6,8 +6,8 @@
             "text": "btn"
         },
         "btn1": {
-            "positionX": 140,
-            "positionY": 170,
+            "positionX": 301,
+            "positionY": 20,
             "text": "btn1"
         }
     },

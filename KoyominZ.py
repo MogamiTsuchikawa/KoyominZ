@@ -172,12 +172,7 @@ class MainWindow(wx.Frame):
         conv = convert.Convert("gui.json","TEST")
     def Make_Build_Clicked(self):
         pass
-
-    
-
-
 app = wx.App(False)
 frame = MainWindow(None, "MouseEvents")
 frame.Show()
-
 app.MainLoop()
