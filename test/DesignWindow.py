@@ -97,13 +97,20 @@ class DesignWindow(wx.Frame):
             self.Move_Object_Pos = pos
             
     def ChangeCtrlValue(self, Target_UI_kind, Target_UI_name, Change_Kind, Change_Value):
-        if Target_UI_kind == "Button":
-            index = self.btn_name.index(Target_UI_name)
-            target_UI_o = self.btn[index]
-            if Change_Kind == "text":
-                target_UI_o.Label = Change_Value
-                print(Change_Value)
-                print(target_UI_o)
+        index = self.Ctrls_Name[Target_UI_kind].index(Target_UI_name)
+        target_UI_o = self.Ctrls[Target_UI_kind][index]
+        if Change_Kind == "text":
+            target_UI_o.Label = Change_Value
+            print(Change_Value)
+            print(target_UI_o)
+        elif Change_Kind == "positionX":
+            point = target_UI_o.GetPosition()
+            target_UI_o.SetPosition(wx.Point(float(Change_Value),point[1]))
+            print(str(target_UI_o.GetPosition()))
+        elif Change_Kind == "positionY":
+            point = target_UI_o.GetPosition()
+            target_UI_o.SetPosition(wx.Point(point[0],float(Change_Value)))
+
     
     def Save(self):
 

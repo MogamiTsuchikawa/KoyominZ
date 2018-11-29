@@ -4,6 +4,9 @@ import DesignWindow,const,convert
 class MainWindow(wx.Frame):
     #@numba.jit
     def __init__(self, parent, title):
+        #[0]にウインドウの名前,[1]に現在表示しているプロパティのコントロールの種類(ex:Button),[2]にコントロールの名前を保管
+        self.list_selected_ctrl = ["","KIND","NAME"]
+        self.selected_ui_d = {}
         self.window_list = ["gui"]
         wx.Frame.__init__(self, parent, title=title)
         self.SetSize(500, 600)
@@ -36,7 +39,6 @@ class MainWindow(wx.Frame):
         self.SetMenuBar(menu_bar)
         #menu_bar_items[menu_bar_items_i].Bind(wx.EVT_MENU,self.Menu_Make_Clicked)
         self.Bind(wx.EVT_MENU,self.Menu_Clicked)
-
         #self.Show(True)
         #
         StaBar = self.CreateStatusBar()
@@ -49,14 +51,14 @@ class MainWindow(wx.Frame):
         self.CtrlList.Size = (200, 400)
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED,self.CtrlList_Clicked, self.CtrlList)
         self.SetCtrlList(self.CtrlList)
-        self.CtrlInfoGrid = wx.grid.Grid(self)
+        self.CtrlInfoGrid = wx.grid.Grid(panel,-1,pos=(210,20))
         self.CtrlInfoGrid.CreateGrid(1, 1)
-        self.CtrlInfoGrid.Position = (210, 20)
         self.CtrlInfoGrid.Size = (200, 400)
-        #self.CtrlInfoGrid.Bind(wx.grid.EVT_GRID_CMD_CELL_LEFT_CLICK,self.CtrlInfoGrid_Clicked())
-
+        self.CtrlInfoGrid.Bind(wx.grid.EVT_GRID_CELL_CHANGED,self.CtrlInfoGrid_Changed)
+        #self.CtrlInfoGrid.Bind(wx.grid.EVT_GRID_CELL_LEFT_CLICK,self.CtrlInfoGrid_Clicked)
     def btn_click(self, i):
-        self.Sub_Window.ChangeCtrlValue("Button", "btn1", "text", "Clicked")
+        #self.Sub_Window.ChangeCtrlValue("Button", "btn1", "text", "Clicked")#デザインウインドウ側へのプロパティ変更用メソッド
+        pass
     def SetCtrlList(self, ctrllist):
         self.cl_root = ctrllist.AddRoot("Windows")
         self.cl_d = []
@@ -99,11 +101,13 @@ class MainWindow(wx.Frame):
                 if ClickedItemParentParent_Name != "Windows":
                     # 選択した物はコントロールの種類でもない　つまり　コントロールの名前
                     f = open(ClickedItemParentParent_Name + '.json')
-                    ui_d = json.load(f)
-                    ClickedItem_d = ui_d[ClickedItemParent_Name][ClickedItem_Name]
+                    self.selected_ui_d = json.load(f)
+                    ClickedItem_d = self.selected_ui_d[ClickedItemParent_Name][ClickedItem_Name]
+                    self.list_selected_ctrl[0] = ClickedItemParentParent_Name
+                    self.list_selected_ctrl[1] = ClickedItemParent_Name
+                    self.list_selected_ctrl[2] = ClickedItem_Name
                     print(ClickedItem_d)
                     d_len = len(ClickedItem_d)
-
                     # resize
                     row_len = self.CtrlInfoGrid.GetNumberRows()
                     if row_len != d_len:
@@ -128,7 +132,21 @@ class MainWindow(wx.Frame):
                 a = 1
     def CtrlInfoGrid_Clicked(self,event):
         print("Clicked")
-
+        tmp = event.GetId()
+        print(tmp)
+    def CtrlInfoGrid_Changed(self,event):
+        print("hello")
+        tmp = event.GetId()
+        print(event.GetString())
+        self.Search_Changed_Ctrl_Kind()
+    def Search_Changed_Ctrl_Kind(self):
+        props = self.selected_ui_d[self.list_selected_ctrl[1]][self.list_selected_ctrl[2]]
+        for prop_kind in props:
+            for i in range(len(props)):
+                if prop_kind == self.CtrlInfoGrid.GetRowLabelValue(i):
+                    if props[prop_kind] != self.CtrlInfoGrid.GetCellValue(i,0):
+                        self.selected_ui_d[self.list_selected_ctrl[1]][self.list_selected_ctrl[2]][prop_kind] = self.CtrlInfoGrid.GetCellValue(i,0)
+                        self.Preview_Window.ChangeCtrlValue(self.list_selected_ctrl[1], self.list_selected_ctrl[2], prop_kind, self.CtrlInfoGrid.GetCellValue(i,0))
     #MenuのMakeがクリックされたときに呼び出し
     def Menu_Clicked(self,event):
         Menu_No = event.GetId()
@@ -157,8 +175,6 @@ class MainWindow(wx.Frame):
     def File_Open_Clicked(self):
         pass
     def File_Save_Clicked(self):
-        #f = open("gui.json",'w')
-        #json.dump(self.Preview_Window.ui_d,f,indent=4)
         self.Preview_Window.Save()
     def File_SaveAs_Clicked(self):
         pass
@@ -172,7 +188,9 @@ class MainWindow(wx.Frame):
         conv = convert.Convert("gui.json","TEST")
     def Make_Build_Clicked(self):
         pass
+
+
 app = wx.App(False)
-frame = MainWindow(None, "MouseEvents")
+frame = MainWindow(None, "KoyominZ TEST")
 frame.Show()
 app.MainLoop()
