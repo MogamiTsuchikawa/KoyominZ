@@ -33,9 +33,16 @@ class MainWindow(wx.Frame):
             menu_items.append(wx.MenuItem(menu_make,menu_items_i+1,m_text))
             menu_make.AppendItem(menu_items[menu_items_i])
             menu_items_i +=1
+        #CTRL MENU
+        menu_ctrl = wx.Menu()
+        for m_text in ["Add Ctrl"]:
+            menu_items.append(wx.MenuItem(menu_ctrl,menu_items_i+1,m_text))
+            menu_ctrl.AppendItem(menu_items[menu_items_i])
+            menu_items_i += 1
         menu_bar.Append(menu_file,"File")
         menu_bar.Append(menu_edit,"Edit")
         menu_bar.Append(menu_make,"Make")
+        menu_bar.Append(menu_ctrl,"Ctrl")
         self.SetMenuBar(menu_bar)
         #menu_bar_items[menu_bar_items_i].Bind(wx.EVT_MENU,self.Menu_Make_Clicked)
         self.Bind(wx.EVT_MENU,self.Menu_Clicked)
@@ -45,17 +52,30 @@ class MainWindow(wx.Frame):
         #デザインウインドウの表示
         self.Preview_Window = DesignWindow.DesignWindow(self, "MousePoint")
         self.Preview_Window_ID = self.Preview_Window.Show()
+
         btn = wx.Button(panel, -1,pos=(50,600))
         btn.Bind(wx.EVT_LEFT_DOWN, self.btn_click)
+
         self.CtrlList = wx.TreeCtrl(panel, -1, pos=(0, 20))
         self.CtrlList.Size = (200, 400)
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED,self.CtrlList_Clicked, self.CtrlList)
         self.SetCtrlList(self.CtrlList)
-        self.CtrlInfoGrid = wx.grid.Grid(panel,-1,pos=(210,20))
+
+        self.tab_view = wx.Notebook(panel,wx.ID_ANY,pos=(210,20))
+        self.tab_view.Size = (200,400)
+        self.CtrlInfoGrid_Panel = wx.Panel(self.tab_view,wx.ID_ANY)
+        self.EvtInfoGrid_Panel = wx.Panel(self.tab_view,wx.ID_ANY)
+        self.tab_view.AddPage(self.CtrlInfoGrid_Panel,"プロパティ")
+        self.tab_view.AddPage(self.EvtInfoGrid_Panel,"イベント")
+
+        self.CtrlInfoGrid = wx.grid.Grid(self.CtrlInfoGrid_Panel,-1,pos=(0,0))
         self.CtrlInfoGrid.CreateGrid(1, 1)
         self.CtrlInfoGrid.Size = (200, 400)
         self.CtrlInfoGrid.Bind(wx.grid.EVT_GRID_CELL_CHANGED,self.CtrlInfoGrid_Changed)
-        #self.CtrlInfoGrid.Bind(wx.grid.EVT_GRID_CELL_LEFT_CLICK,self.CtrlInfoGrid_Clicked)
+
+        self.EvtInfoGrid = wx.grid.Grid(self.EvtInfoGrid_Panel,-1,pos=(0,0))
+        self.EvtInfoGrid.CreateGrid(1,1)
+        self.EvtInfoGrid.Size=(200,400)
     def btn_click(self, i):
         #self.Sub_Window.ChangeCtrlValue("Button", "btn1", "text", "Clicked")#デザインウインドウ側へのプロパティ変更用メソッド
         pass
@@ -110,6 +130,8 @@ class MainWindow(wx.Frame):
                     d_len = len(ClickedItem_d)
                     # resize
                     row_len = self.CtrlInfoGrid.GetNumberRows()
+                    if "event" in ClickedItem_d:
+                        d_len -= 1
                     if row_len != d_len:
                             if row_len < d_len:
                                 need_len = d_len - row_len
@@ -121,11 +143,11 @@ class MainWindow(wx.Frame):
                     self.CtrlInfoGrid.SetColSize(0, 50)
                     count = 0
                     for PropKind in ClickedItem_d:
-                        self.CtrlInfoGrid.SetRowLabelValue(count, PropKind)
-                        self.CtrlInfoGrid.SetCellValue(
-                            count, 0, str(ClickedItem_d[PropKind]))
-                        # self.CtrlInfoGrid.SetReadOnly(count,0,True)
-                        count += 1
+                        if PropKind != "event":
+                            self.CtrlInfoGrid.SetRowLabelValue(count, PropKind)
+                            self.CtrlInfoGrid.SetCellValue(
+                                count, 0, str(ClickedItem_d[PropKind]))
+                            count += 1
             else:
                 # 選択した物はウインドウの名前
                 # ウインドウの情報を表示
@@ -169,6 +191,8 @@ class MainWindow(wx.Frame):
             self.Make_MakeCS_Clicked()
         elif Menu_No == 9:
             self.Make_Build_Clicked()
+        elif Menu_No == 10:
+            self.Ctrl_AddCtrl_Clicked()
     
     def File_New_Clicked(self):
         pass
@@ -185,8 +209,10 @@ class MainWindow(wx.Frame):
     def Edit_Paste_Clicked(self):
         pass
     def Make_MakeCS_Clicked(self):
-        conv = convert.Convert("gui.json","TEST")
+        conv = convert.Convert("gui.json","test")
     def Make_Build_Clicked(self):
+        pass
+    def Ctrl_AddCtrl_Clicked(self):
         pass
 
 

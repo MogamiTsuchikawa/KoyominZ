@@ -59,6 +59,8 @@ class DesignWindow(wx.Frame):
                 self.progressbar_name.append(b)
             Target_UIs[i].Bind(wx.EVT_LEFT_DOWN, self.Left_Down)
             Target_UIs[i].Bind(wx.EVT_RIGHT_DOWN, self.Right_Down)
+            if("sizeX" in T_UI_b):
+                Target_UIs[i].SetSize(float(T_UI_b["sizeX"]),float(T_UI_b["sizeY"]))
             i += 1
 
     def Left_Down(self, event):
@@ -110,10 +112,15 @@ class DesignWindow(wx.Frame):
         elif Change_Kind == "positionY":
             point = target_UI_o.GetPosition()
             target_UI_o.SetPosition(wx.Point(point[0],float(Change_Value)))
+        elif Change_Kind == "sizeX":
+            size = target_UI_o.GetSize()
+            target_UI_o.SetSize(float(Change_Value),size[1])
+        elif Change_Kind == "sizeY":
+            size = target_UI_o.GetSize()
+            target_UI_o.SetSize(size[0],float(Change_Value))
 
     
     def Save(self):
-
         f = open("gui.json",'w')
         json.dump(self.ui_d,f,indent=4)
         f.close()

@@ -1,20 +1,25 @@
 {
     "Button": {
         "btn": {
-            "positionX": 0,
-            "positionY": 0,
-            "text": "btn"
+            "positionX": 45,
+            "positionY": 20,
+            "text": "btn",
+            "sizeX": 60,
+            "sizeY": 20,
+            "event":{
+                "ON_CLICK":"btn_click"
+            }
         },
         "btn1": {
-            "positionX": 13,
-            "positionY": 125,
+            "positionX": 235,
+            "positionY": 114,
             "text": "btn1"
         }
     },
     "TextBox": {
         "textbox1": {
-            "positionX": 0,
-            "positionY": 20,
+            "positionX": 127,
+            "positionY": 38,
             "text": "sample"
         }
     },

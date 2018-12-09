@@ -8,7 +8,7 @@ def MakeCtrlProps_CS(ui_d, kind):
     ui_d_a = ui_d[kind]
     for ctrlname in ui_d_a:
         target = ui_d_a[ctrlname]
-        output += "            this.%s.Name = \"%s\"\n" % (
+        output += "            this.%s.Name = \"%s\";\n" % (
             ctrlname, ctrlname)
         for prop_kind in target:
             rtn = GetProp_CS(prop_kind, target)
