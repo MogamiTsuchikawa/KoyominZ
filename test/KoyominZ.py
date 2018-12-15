@@ -1,5 +1,5 @@
 import wx,json,copy,asyncio,threading,wx.grid,numba
-import DesignWindow,const,convert
+import DesignWindow,const,convert,UI_D
 
 class MainWindow(wx.Frame):
     #@numba.jit
@@ -8,6 +8,8 @@ class MainWindow(wx.Frame):
         self.list_selected_ctrl = ["","KIND","NAME"]
         self.selected_ui_d = {}
         self.window_list = ["gui"]
+        self.proj_direc = "" #後でProjectManager.py/Load_Projメソッドから取得するようにする。
+        UI_D.Set_ui_d(self.window_list,self.proj_direc)
         wx.Frame.__init__(self, parent, title=title)
         self.SetSize(500, 600)
         panel = wx.Panel(self, wx.ID_ANY)
@@ -90,8 +92,7 @@ class MainWindow(wx.Frame):
             self.cl_names.append({win_name, "Window", win_name})
             win_i = i
             i += 1
-            f = open(win_name+".json")
-            ui_d = json.load(f)
+            ui_d = UI_D.ui_d_s[win_name]
             ctrl_i = 0
             for ui in const.UIs:
                 self.cl_d.append(ctrllist.AppendItem(self.cl_d[win_i], ui))
