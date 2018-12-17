@@ -1,4 +1,9 @@
 {
+    "Window":{
+        "name":"sample_window",
+        "size":{"X":600,"Y":500},
+        "text":"Hello"
+    },
     "Button": {
         "btn": {
             "positionX": 45,
