@@ -1,14 +1,20 @@
 import wx,json,copy,asyncio,threading,wx.grid,numba
-import DesignWindow,const,convert,UI_D
+import DesignWindow,const,convert,UI_D,KoyominZ
 
 class MainWindow(wx.Frame):
     #@numba.jit
-    def __init__(self, parent, title):
+    def __init__(self, parent, title,testmode):
         #[0]にウインドウの名前,[1]に現在表示しているプロパティのコントロールの種類(ex:Button),[2]にコントロールの名前を保管
         self.list_selected_ctrl = ["","KIND","NAME"]
         self.selected_ui_d = {}
-        self.window_list = ["gui"]
-        self.proj_direc = "" #後でProjectManager.py/Load_Projメソッドから取得するようにする。
+        if testmode:
+            self.window_list = ["gui"] #動作試験用に確保。今後削除
+            self.proj_direc = "TEST"
+        else:
+            self.window_list = KoyominZ.window_list
+            self.proj_direc = KoyominZ.proj_dir
+        
+        
         UI_D.Set_ui_d(self.window_list,self.proj_direc)
         wx.Frame.__init__(self, parent, title=title)
         self.SetSize(500, 600)
@@ -218,6 +224,6 @@ class MainWindow(wx.Frame):
 
 
 app = wx.App(False)
-frame = MainWindow(None, "KoyominZ TEST")
+frame = MainWindow(None, "KoyominZ TEST",True)
 frame.Show()
 app.MainLoop()

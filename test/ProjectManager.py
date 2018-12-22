@@ -1,20 +1,32 @@
-import UI_D,wx
-def Load_Proj():
-    Proj_Direc = ""
+import UI_D,wx,os
+proj_dir = ""
+window_list = []
+def Load_Proj(dirname):
+    proj_dir = dirname
+
     
+def Get_proj_dir():
+    return proj_dir
 
 class Manager_Window(wx.Frame):
     def __init__(self,parent):
         wx.Frame.__init__(self,parent,title="KoyominZ Project Manager")
         self.SetSize(960,540)
         self.panel = wx.Panel(self,wx.ID_ANY)
-        self.New_Btn = wx.Button(self.panel,-1,label="New",pos=(10,10))
+        back_img_bm = wx.Image(os.path.dirname(__file__)+'/res/bg_KoyominZ.png').ConvertToBitmap()
+        self.back_img = wx.StaticBitmap(self.panel,-1,back_img_bm,(0,0),self.GetClientSize())
+        
+        self.New_Btn = wx.Button(self.back_img,-1,label="New",pos=(655,120))
+        self.New_Btn.SetSize(180,60)
         self.New_Btn.Bind(wx.EVT_BUTTON,self.New_Btn_Clicked)
-        self.Load_Btn = wx.Button(self.panel,-1,label="Load",pos=(10,40))
+        self.Load_Btn = wx.Button(self.back_img,-1,label="Load",pos=(580,190))
+        self.Load_Btn.SetSize(180,60)
         self.Load_Btn.Bind(wx.EVT_BUTTON,self.Load_Btn_Clicked)
-        self.Setting_Btn = wx.Button(self.panel,-1,label="Setting",pos=(10,70))
+        self.Setting_Btn = wx.Button(self.back_img,-1,label="Setting",pos=(505,260))
+        self.Setting_Btn.SetSize(180,60)
         self.Setting_Btn.Bind(wx.EVT_BUTTON,self.Setting_Btn_Clicked)
-        self.OpenWebSite_Btn = wx.Button(self.panel,-1,label="New",pos=(10,100))
+        self.OpenWebSite_Btn = wx.Button(self.back_img,-1,label="OpenWebSite",pos=(430,330))
+        self.OpenWebSite_Btn.SetSize(180,60)
         self.OpenWebSite_Btn.Bind(wx.EVT_BUTTON,self.OpenWebSite_Btn_Clicked)
     def New_Btn_Clicked(self,event):
         pass
@@ -26,15 +38,18 @@ class Manager_Window(wx.Frame):
             self.dirname = fo_dialog.GetDirectory()
             print(self.filename)
             print(self.dirname)
+            if self.filename == "PROJECT.imp": #ファイル名に関しては後々再考
+                Load_Proj(self.dirname)
     def Setting_Btn_Clicked(self,event):
         pass
     def OpenWebSite_Btn_Clicked(self,event):
         pass
 
-def Load_Proj_XML():
-    pass
-    #projectの含んでいるファイルやターゲット環境などのビルドに必要な情報を格納
 
+
+class NewProject(wx.Frame):
+    def __init__(self,parent):
+        print("NewProject!")
 app = wx.App(False)
 frame = Manager_Window(None)
 frame.Show()
