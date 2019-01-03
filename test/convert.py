@@ -20,8 +20,8 @@ def MakeCtrlProps_CS(ui_d, kind):
 def GetProp_CS(prop_kind, target):
     rtn = ""
     if prop_kind == "positionX":
-        PosX = str(target["positionX"])
-        PosY = str(target["positionY"])
+        PosX = str(target["position"]["X"])
+        PosY = str(target["position"]["Y"])
         rtn = ".Location = new System.Drawing.Point(%s,%s);" % (PosX, PosY)
     elif prop_kind == "text":
         text = str(target["text"])

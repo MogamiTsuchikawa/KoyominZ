@@ -50,6 +50,9 @@ class Manager_Window(wx.Frame):
 class NewProject(wx.Frame):
     def __init__(self,parent):
         print("NewProject!")
+        self.SetSize(960,540)
+        self.panel = wx.Panel(self,wx.ID_ANY)
+        MakeBtn = wx.Button(self.panel,-1,label="Make!",pos=(0,0))
 app = wx.App(False)
 frame = Manager_Window(None)
 frame.Show()
