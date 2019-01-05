@@ -1,0 +1,8 @@
+"aboutthis":{
+    "name":"sample_project",
+    "kind":"dotnetcore_winform"
+},
+"sourcefiles":{
+    "cs":"Program",
+    "gui":"test"
+}

@@ -11,8 +11,8 @@ class MainWindow(wx.Frame):
             self.window_list = ["gui"] #動作試験用に確保。今後削除
             self.proj_direc = "TEST"
         else:
-            self.window_list = KoyominZ.window_list
-            self.proj_direc = KoyominZ.proj_dir
+            self.window_list = const.source_files['json']
+            self.proj_direc = const.project_dir
         
         
         UI_D.Set_ui_d(self.window_list,self.proj_direc)

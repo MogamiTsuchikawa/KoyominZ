@@ -1,9 +1,17 @@
-import UI_D,wx,os
+import UI_D,wx,os,const,json
 proj_dir = ""
 window_list = []
 def Load_Proj(dirname):
     proj_dir = dirname
-
+    # PROJECT.imp のパージ＆constへ値入力
+    pf = open(proj_dir + '/PROJECT.imp','r')
+    p_info = json.load(pf)
+    const.project_dir = proj_dir
+    const.project_name = p_info['aboutthis']['name']
+    const.project_kind = p_info['aboutthis']['kind']
+    #ソースファイル extは拡張子キーを入れる
+    for ext in  p_info['sourcefiles']:
+        const.source_files[ext] = p_info['sourcefiles'][ext].split(",")
     
 def Get_proj_dir():
     return proj_dir
@@ -40,12 +48,11 @@ class Manager_Window(wx.Frame):
             print(self.dirname)
             if self.filename == "PROJECT.imp": #ファイル名に関しては後々再考
                 Load_Proj(self.dirname)
+                wx.Exit()
     def Setting_Btn_Clicked(self,event):
         pass
     def OpenWebSite_Btn_Clicked(self,event):
         pass
-
-
 
 class NewProject(wx.Frame):
     def __init__(self,parent):
