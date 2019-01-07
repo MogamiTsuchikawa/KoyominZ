@@ -1,12 +1,12 @@
-import wx,copy,json,numba
+import wx,copy,json
 import const
 import format_check
 
-class DesignWindow(wx.Frame):
-    def __init__(self, parent, title):
+class Design_Window(wx.Frame):
+    def __init__(self, parent, winname):
         self.Move_Object = None
         self.Move_Object_Pos = None
-        self.f = open("gui.json", 'r')
+        self.f = open(const.project_dir+"/"+winname+".gson", 'r')
         self.ui_d = json.load(self.f)
         self.DW_panel = None
         self.btn = []
@@ -22,7 +22,7 @@ class DesignWindow(wx.Frame):
         self.progressbar = []
         self.progressbar_name = []
 
-        wx.Frame.__init__(self, parent, title=title)
+        wx.Frame.__init__(self, parent)
         self.DW_panel = wx.Panel(self, wx.ID_ANY)
         self.Ctrls = {"Button": self.btn, "TextBox": self.textbox, "Label": self.label,"CheckBox": self.checkbox, "ComboBox": self.combobox, "ProgressBar": self.progressbar}
         self.Ctrls_Name = {"Button": self.btn_name, "TextBox": self.textbox_name, "Label": self.label_name,"CheckBox": self.checkbox_name, "ComboBox": self.combobox_name, "ProgressBar": self.progressbar_name}

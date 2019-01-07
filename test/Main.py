@@ -1,5 +1,5 @@
 import wx,json,copy,asyncio,threading,wx.grid,numba
-import DesignWindow,const,convert,UI_D,KoyominZ
+import DesignWindow,const,convert,UI_D
 
 class MainWindow(wx.Frame):
     #@numba.jit
@@ -7,11 +7,13 @@ class MainWindow(wx.Frame):
         #[0]にウインドウの名前,[1]に現在表示しているプロパティのコントロールの種類(ex:Button),[2]にコントロールの名前を保管
         self.list_selected_ctrl = ["","KIND","NAME"]
         self.selected_ui_d = {}
+        self.Preview_Windows = {}
+        self.Preview_Window_IDs = {}
         if testmode:
             self.window_list = ["gui"] #動作試験用に確保。今後削除
             self.proj_direc = "TEST"
         else:
-            self.window_list = const.source_files['json']
+            self.window_list = const.source_files['gson']
             self.proj_direc = const.project_dir
         
         
@@ -57,12 +59,10 @@ class MainWindow(wx.Frame):
         #self.Show(True)
         #
         StaBar = self.CreateStatusBar()
-        #デザインウインドウの表示
-        self.Preview_Window = DesignWindow.DesignWindow(self, "MousePoint")
-        self.Preview_Window_ID = self.Preview_Window.Show()
+        #デザインウインドウの表示 Show_Preview_Windowメソッドに移行
+        #self.Preview_Window = DesignWindow.DesignWindow(self, "MousePoint")
+        #self.Preview_Window_ID = self.Preview_Window.Show()
 
-        btn = wx.Button(panel, -1,pos=(50,600))
-        btn.Bind(wx.EVT_LEFT_DOWN, self.btn_click)
 
         self.CtrlList = wx.TreeCtrl(panel, -1, pos=(0, 20))
         self.CtrlList.Size = (200, 400)
@@ -84,8 +84,13 @@ class MainWindow(wx.Frame):
         self.EvtInfoGrid = wx.grid.Grid(self.EvtInfoGrid_Panel,-1,pos=(0,0))
         self.EvtInfoGrid.CreateGrid(1,1)
         self.EvtInfoGrid.Size=(200,400)
-    def btn_click(self, i):
-        #self.Sub_Window.ChangeCtrlValue("Button", "btn1", "text", "Clicked")#デザインウインドウ側へのプロパティ変更用メソッド
+        for winname in self.window_list:
+            #self.Show_Preview_Window(winname)
+            pass
+        
+    def Show_Preview_Window(self,target_winname):
+        self.Preview_Windows[target_winname] = DesignWindow.Design_Window(self,target_winname)
+        self.Preview_Window_IDs[target_winname] = self.Preview_Window.Show()
         pass
     def SetCtrlList(self, ctrllist):
         self.cl_root = ctrllist.AddRoot("Windows")

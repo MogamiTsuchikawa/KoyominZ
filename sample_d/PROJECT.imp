@@ -1,8 +1,10 @@
-"aboutthis":{
-    "name":"sample_project",
-    "kind":"dotnetcore_winform"
-},
-"sourcefiles":{
-    "cs":"Program",
-    "gui":"test"
+{
+    "aboutthis":{
+        "name":"test_app",
+        "kind":"dotnetcore_winform"
+    },
+    "sourcefiles":{
+        "cs":"Program,Form1",
+        "gson":"Form1"
+    }
 }

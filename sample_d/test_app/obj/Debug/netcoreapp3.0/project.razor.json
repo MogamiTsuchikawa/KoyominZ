@@ -1,0 +1,14 @@
+{
+  "ProjectFilePath": "c:\\Users\\atsuy\\Documents\\Git\\KoyominZ\\sample_d\\test_app\\test_app.csproj",
+  "TargetFramework": "netcoreapp3.0",
+  "TagHelpers": [],
+  "Configuration": {
+    "ConfigurationName": "UnsupportedRazor",
+    "LanguageVersion": "1.0",
+    "Extensions": [
+      {
+        "ExtensionName": "UnsupportedRazorExtension"
+      }
+    ]
+  }
+}

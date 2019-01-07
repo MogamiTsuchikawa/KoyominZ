@@ -1,4 +1,4 @@
-import wx,time,json,numba,xmltodict
+import wx,time,json,xmltodict
 import xml.etree.ElementTree as ET
 import const
 #指定されたコントロールの種類の全部のプロパティを生成

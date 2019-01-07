@@ -1,0 +1,14 @@
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\bin\Debug\netcoreapp3.0\test_app.exe
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\bin\Debug\netcoreapp3.0\test_app.deps.json
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\bin\Debug\netcoreapp3.0\test_app.runtimeconfig.json
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\bin\Debug\netcoreapp3.0\test_app.runtimeconfig.dev.json
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\bin\Debug\netcoreapp3.0\test_app.dll
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\bin\Debug\netcoreapp3.0\test_app.pdb
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\obj\Debug\netcoreapp3.0\test_app.csprojAssemblyReference.cache
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\obj\Debug\netcoreapp3.0\test_app.Form1.resources
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\obj\Debug\netcoreapp3.0\test_app.csproj.GenerateResource.cache
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\obj\Debug\netcoreapp3.0\test_app.csproj.CoreCompileInputs.cache
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\obj\Debug\netcoreapp3.0\test_app.AssemblyInfoInputs.cache
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\obj\Debug\netcoreapp3.0\test_app.AssemblyInfo.cs
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\obj\Debug\netcoreapp3.0\test_app.dll
+C:\Users\atsuy\Documents\Git\KoyominZ\sample_d\test_app\obj\Debug\netcoreapp3.0\test_app.pdb
