@@ -1,0 +1,86 @@
+{
+    "Window":{
+        "name":"Form2",
+        "size":{"X":600,"Y":500},
+        "text":"Hello2"
+    },
+    "Button": {
+        "btn": {
+            "positionX": 45,
+            "positionY": 20,
+            "position":{
+                "X":45,
+                "Y":20
+            },
+            "text": "btn",
+            "sizeX": 60,
+            "sizeY": 20,
+            "event":{
+                "ON_CLICK":"btn_click"
+            }
+        },
+        "btn1": {
+            "positionX": 235,
+            "positionY": 114,
+            "position":{
+                "X":235,
+                "Y":114
+            },
+            "text": "btn1"
+        }
+    },
+    "TextBox": {
+        "textbox1": {
+            "positionX": 127,
+            "positionY": 38,
+            "position":{
+                "X":127,
+                "Y":38
+            },
+            "text": "sample"
+        }
+    },
+    "Label": {
+        "label1": {
+            "positionX": 0,
+            "positionY": 40,
+            "position":{
+                "X":0,
+                "Y":40
+            },
+            "text": "sample"
+        }
+    },
+    "CheckBox": {
+        "checkbox1": {
+            "positionX": 0,
+            "positionY": 60,
+            "position":{
+                "X":0,
+                "Y":60
+            },
+            "text": "sample"
+        }
+    },
+    "ComboBox": {
+        "combobox1": {
+            "positionX": 0,
+            "positionY": 80,
+            "position":{
+                "X":0,
+                "Y":80
+            },
+            "text": "sample"
+        }
+    },
+    "ProgressBar": {
+        "progressbar1": {
+            "positionX": 0,
+            "positionY": 100,
+            "position":{
+                "X":0,
+                "Y":100
+            }
+        }
+    }
+}

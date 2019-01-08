@@ -6,7 +6,7 @@ class Design_Window(wx.Frame):
     def __init__(self, parent, winname):
         self.Move_Object = None
         self.Move_Object_Pos = None
-        self.f = open(const.project_dir+"/"+winname+".gson", 'r')
+        self.f = open(const.project_dir+"\\"+winname+".gson", 'r')
         self.ui_d = json.load(self.f)
         self.DW_panel = None
         self.btn = []

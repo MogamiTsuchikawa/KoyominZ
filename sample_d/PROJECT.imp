@@ -4,7 +4,7 @@
         "kind":"dotnetcore_winform"
     },
     "sourcefiles":{
-        "cs":"Program,Form1",
-        "gson":"Form1"
+        "cs":"Program,Form1,Form2",
+        "gson":"Form1,Form2"
     }
 }

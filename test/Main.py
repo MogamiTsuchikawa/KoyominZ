@@ -85,12 +85,12 @@ class MainWindow(wx.Frame):
         self.EvtInfoGrid.CreateGrid(1,1)
         self.EvtInfoGrid.Size=(200,400)
         for winname in self.window_list:
-            #self.Show_Preview_Window(winname)
-            pass
+            self.Show_Preview_Window(winname)
+            #pass
         
     def Show_Preview_Window(self,target_winname):
         self.Preview_Windows[target_winname] = DesignWindow.Design_Window(self,target_winname)
-        self.Preview_Window_IDs[target_winname] = self.Preview_Window.Show()
+        self.Preview_Window_IDs[target_winname] = self.Preview_Windows[target_winname].Show()
         pass
     def SetCtrlList(self, ctrllist):
         self.cl_root = ctrllist.AddRoot("Windows")
@@ -132,7 +132,7 @@ class MainWindow(wx.Frame):
                     ClickedItemParentParent)
                 if ClickedItemParentParent_Name != "Windows":
                     # 選択した物はコントロールの種類でもない　つまり　コントロールの名前
-                    f = open(ClickedItemParentParent_Name + '.json')
+                    f = open(const.project_dir +"\\"+ ClickedItemParentParent_Name + '.gson')
                     self.selected_ui_d = json.load(f)
                     ClickedItem_d = self.selected_ui_d[ClickedItemParent_Name][ClickedItem_Name]
                     self.list_selected_ctrl[0] = ClickedItemParentParent_Name
@@ -226,9 +226,3 @@ class MainWindow(wx.Frame):
         pass
     def Ctrl_AddCtrl_Clicked(self):
         pass
-
-
-app = wx.App(False)
-frame = MainWindow(None, "KoyominZ TEST",True)
-frame.Show()
-app.MainLoop()
