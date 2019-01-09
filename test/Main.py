@@ -157,9 +157,14 @@ class MainWindow(wx.Frame):
                     for PropKind in ClickedItem_d:
                         if PropKind != "event":
                             self.CtrlInfoGrid.SetRowLabelValue(count, PropKind)
-                            self.CtrlInfoGrid.SetCellValue(
-                                count, 0, str(ClickedItem_d[PropKind]))
+                            if PropKind == "position" or PropKind == "size":
+                                self.CtrlInfoGrid.SetCellValue(
+                                    count, 0, str(ClickedItem_d[PropKind]["X"])+","+str(ClickedItem_d[PropKind]["Y"]))
+                            else:
+                                self.CtrlInfoGrid.SetCellValue(
+                                    count, 0, str(ClickedItem_d[PropKind]))
                             count += 1
+                            
             else:
                 # 選択した物はウインドウの名前
                 # ウインドウの情報を表示
@@ -178,9 +183,22 @@ class MainWindow(wx.Frame):
         for prop_kind in props:
             for i in range(len(props)):
                 if prop_kind == self.CtrlInfoGrid.GetRowLabelValue(i):
-                    if props[prop_kind] != self.CtrlInfoGrid.GetCellValue(i,0):
-                        self.selected_ui_d[self.list_selected_ctrl[1]][self.list_selected_ctrl[2]][prop_kind] = self.CtrlInfoGrid.GetCellValue(i,0)
-                        self.Preview_Window.ChangeCtrlValue(self.list_selected_ctrl[1], self.list_selected_ctrl[2], prop_kind, self.CtrlInfoGrid.GetCellValue(i,0))
+                    IsChenged = False
+                    if prop_kind == "position" or prop_kind == "size":
+                        IsChenged = (str(props[prop_kind]["X"])+","+str(props[prop_kind]["Y"])) != self.CtrlInfoGrid.GetCellValue(i,0)
+                    else:
+                        IsChenged = props[prop_kind] != self.CtrlInfoGrid.GetCellValue(i,0)
+                    if IsChenged:
+                        Selected_winname = self.selected_ui_d["Window"]["name"]
+                        if prop_kind == "position" or prop_kind == "size":
+                            NewValue = {}
+                            NewValue["X"] = float(self.CtrlInfoGrid.GetCellValue(i,0).split(',')[0])
+                            NewValue["Y"] = float(self.CtrlInfoGrid.GetCellValue(i,0).split(',')[1])
+                            self.selected_ui_d[self.list_selected_ctrl[1]][self.list_selected_ctrl[2]][prop_kind] = NewValue
+                        else:
+                            self.selected_ui_d[self.list_selected_ctrl[1]][self.list_selected_ctrl[2]][prop_kind] = self.CtrlInfoGrid.GetCellValue(i,0)
+                        
+                        self.Preview_Windows[Selected_winname].ChangeCtrlValue(self.list_selected_ctrl[1], self.list_selected_ctrl[2], prop_kind, self.CtrlInfoGrid.GetCellValue(i,0))
     #MenuのMakeがクリックされたときに呼び出し
     def Menu_Clicked(self,event):
         Menu_No = event.GetId()

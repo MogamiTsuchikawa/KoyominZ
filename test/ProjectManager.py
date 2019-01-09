@@ -1,4 +1,4 @@
-import UI_D,wx,os,const,json
+import UI_D,wx,os,const,json,NewProject
 proj_dir = ""
 window_list = []
 
@@ -28,7 +28,11 @@ class Manager_Window(wx.Frame):
         self.OpenWebSite_Btn.SetSize(180,60)
         self.OpenWebSite_Btn.Bind(wx.EVT_BUTTON,self.OpenWebSite_Btn_Clicked)
     def New_Btn_Clicked(self,event):
-        pass
+        NewProject_o = wx.App(False)
+        NewProject_f = NewProject.NewProject(None)
+        NewProject_f.Show()
+        NewProject_o.MainLoop()
+        self.Close(True)
     def Load_Btn_Clicked(self,event):
         self.dirname = ""
         fo_dialog = wx.FileDialog(self, "ファイルを選択してください", self.dirname, "", "*.*", wx.FD_OPEN)
@@ -55,10 +59,3 @@ class Manager_Window(wx.Frame):
         #ソースファイル extは拡張子キーを入れる
         for ext in  p_info['sourcefiles']:
             const.source_files[ext] = p_info['sourcefiles'][ext].split(",")
-
-class NewProject(wx.Frame):
-    def __init__(self,parent):
-        print("NewProject!")
-        self.SetSize(960,540)
-        self.panel = wx.Panel(self,wx.ID_ANY)
-        MakeBtn = wx.Button(self.panel,-1,label="Make!",pos=(0,0))

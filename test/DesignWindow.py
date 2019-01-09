@@ -110,13 +110,6 @@ class Design_Window(wx.Frame):
             target_UI_o.Label = Change_Value
             print(Change_Value)
             print(target_UI_o)
-        #将来的にpositionX,positionYは削除予定
-        elif Change_Kind == "positionX":
-            point = target_UI_o.GetPosition()
-            target_UI_o.SetPosition(wx.Point(float(Change_Value),point[1]))
-        elif Change_Kind == "positionY":
-            point = target_UI_o.GetPosition()
-            target_UI_o.SetPosition(wx.Point(point[0],float(Change_Value)))
         #positionX,Yの代わり。','によって区切り
         elif Change_Kind == "position":
             rtn = format_check.format_check(Target_UI_kind,Change_Kind,Change_Value)
@@ -126,13 +119,6 @@ class Design_Window(wx.Frame):
                 target_UI_o.SetPosition(c_point)
             else:
                 return rtn
-        #将来的にsizeX,Yは削除予定
-        elif Change_Kind == "sizeX":
-            size = target_UI_o.GetSize()
-            target_UI_o.SetSize(float(Change_Value),size[1])
-        elif Change_Kind == "sizeY":
-            size = target_UI_o.GetSize()
-            target_UI_o.SetSize(size[0],float(Change_Value))
         #sizeX,Yの代わり
         elif Change_Kind == "size":
             rtn = format_check.format_check(Target_UI_kind,Change_Kind,Change_Value)
