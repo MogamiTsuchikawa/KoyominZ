@@ -8,6 +8,7 @@ def Get_proj_dir():
 
 class Manager_Window(wx.Frame):
     def __init__(self,parent):
+        self.MoveOrder = []
         wx.Frame.__init__(self,parent,title="KoyominZ Project Manager")
         self.parent = parent
         self.SetSize(960,540)
@@ -29,9 +30,10 @@ class Manager_Window(wx.Frame):
         self.OpenWebSite_Btn.Bind(wx.EVT_BUTTON,self.OpenWebSite_Btn_Clicked)
     def New_Btn_Clicked(self,event):
         NewProject_o = wx.App(False)
-        NewProject_f = NewProject.NewProject(None)
+        NewProject_f = NewProject.NewProject(self)
         NewProject_f.Show()
         NewProject_o.MainLoop()
+        print("Close")
         self.Close(True)
     def Load_Btn_Clicked(self,event):
         self.dirname = ""
@@ -59,3 +61,23 @@ class Manager_Window(wx.Frame):
         #ソースファイル extは拡張子キーを入れる
         for ext in  p_info['sourcefiles']:
             const.source_files[ext] = p_info['sourcefiles'][ext].split(",")
+    def MoveCtrl(self,event):
+        for i in range(len(self.MoveOrder)):
+            order_d = self.MoveOrder[i]
+            x_v = order_d["new_point"][0] - order_d["old_point"][0]
+            y_v = order_d["new_point"][1] - order_d["old_point"][1]
+            m_t = order_d["time"] / 2
+            target_obj = order_d["obj"]
+            pos = target_obj.GetPosition()
+            if x_v != 0:
+                m_x = x_v / m_t
+                pos = wx.Point(pos[0]+m_x,pos[1])
+                target_obj.SetPosition()
+            if y_v != 0:
+                m_y = y_v / m_t
+                pos = wx.Point(pos[0],pos[1]+m_y)
+                target_obj.SetPosition()
+    def SetMoveOrder(self,target_obj,target_point,time):
+        target_current_ponit = target_obj.GetPosition()
+        order_d = {"obj":target_obj,"new_point":target_point,"old_point":target_current_ponit,"time":time}
+        self.MoveOrder.append(order_d)
