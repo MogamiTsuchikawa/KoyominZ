@@ -6,7 +6,7 @@ window_list = []
 def Get_proj_dir():
     return proj_dir
 
-class Manager_Window(wx.Frame):
+class Manager_Window(wx.Dialog):
     def __init__(self,parent):
         self.MoveOrder = []
         wx.Frame.__init__(self,parent,title="KoyominZ Project Manager")
@@ -29,11 +29,10 @@ class Manager_Window(wx.Frame):
         self.OpenWebSite_Btn.SetSize(180,60)
         self.OpenWebSite_Btn.Bind(wx.EVT_BUTTON,self.OpenWebSite_Btn_Clicked)
     def New_Btn_Clicked(self,event):
-        NewProject_o = wx.App(False)
         NewProject_f = NewProject.NewProject(self)
-        NewProject_f.Show()
-        NewProject_o.MainLoop()
+        NewProject_f.ShowModal()
         print("Close")
+        self.Load_Proj(const.project_dir)
         self.Close(True)
     def Load_Btn_Clicked(self,event):
         self.dirname = ""

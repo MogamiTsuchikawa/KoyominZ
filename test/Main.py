@@ -1,10 +1,11 @@
-import wx,json,copy,asyncio,threading,wx.grid,numba
-import DesignWindow,const,convert,UI_D
+import wx,json,copy,asyncio,threading,wx.grid,numba,os
+import DesignWindow,const,convert,UI_D,build
 
 class MainWindow(wx.Frame):
     #@numba.jit
     def __init__(self, parent, title,testmode):
         #[0]にウインドウの名前,[1]に現在表示しているプロパティのコントロールの種類(ex:Button),[2]にコントロールの名前を保管
+        self.Current_InfoGrid_d = None
         self.list_selected_ctrl = ["","KIND","NAME"]
         self.selected_ui_d = {}
         self.Preview_Windows = {}
@@ -15,6 +16,7 @@ class MainWindow(wx.Frame):
         else:
             self.window_list = const.source_files['gson']
             self.proj_direc = const.project_dir
+            UI_D.Set_ui_d(self.window_list,const.project_dir)
         
         
         UI_D.Set_ui_d(self.window_list,self.proj_direc)
@@ -84,14 +86,22 @@ class MainWindow(wx.Frame):
         self.EvtInfoGrid = wx.grid.Grid(self.EvtInfoGrid_Panel,-1,pos=(0,0))
         self.EvtInfoGrid.CreateGrid(1,1)
         self.EvtInfoGrid.Size=(200,400)
+        self.timer = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER,self.Check_ui_d_update)
+        self.timer.Start(100)
         for winname in self.window_list:
             self.Show_Preview_Window(winname)
             #pass
-        
+        #VS Codeの表示
+        os.system("cd "+const.project_dir+const.pathsep+const.project_name+" & code .")
     def Show_Preview_Window(self,target_winname):
         self.Preview_Windows[target_winname] = DesignWindow.Design_Window(self,target_winname)
         self.Preview_Window_IDs[target_winname] = self.Preview_Windows[target_winname].Show()
-        pass
+    def Check_ui_d_update(self,event):
+        #Timerイベントで呼び出し。const.update_main_showdataがTrueでないかを確認
+        if const.update_main_window_showdata:
+            self.Update_CtrlInfoGrid()
+            const.update_main_window_showdata = False
     def SetCtrlList(self, ctrllist):
         self.cl_root = ctrllist.AddRoot("Windows")
         self.cl_d = []
@@ -110,11 +120,12 @@ class MainWindow(wx.Frame):
                 self.cl_names.append({ui+".root", "root"})
                 ctrl_i = i
                 i += 1
-                for ctrl_name in ui_d[ui]:
-                    self.cl_d.append(ctrllist.AppendItem(
-                        self.cl_d[ctrl_i], ctrl_name))
-                    self.cl_names.append({win_name, ui, ctrl_name})
-                    i += 1
+                if ui in ui_d:
+                    for ctrl_name in ui_d[ui]:
+                        self.cl_d.append(ctrllist.AppendItem(
+                            self.cl_d[ctrl_i], ctrl_name))
+                        self.cl_names.append({win_name, ui, ctrl_name})
+                        i += 1
     #@numba.jit
     def CtrlList_Clicked(self, event):
         ClickedItem_Name = self.CtrlList.GetItemText(event.GetItem())
@@ -133,7 +144,8 @@ class MainWindow(wx.Frame):
                 if ClickedItemParentParent_Name != "Windows":
                     # 選択した物はコントロールの種類でもない　つまり　コントロールの名前
                     f = open(const.project_dir +"\\"+ ClickedItemParentParent_Name + '.gson')
-                    self.selected_ui_d = json.load(f)
+                    #self.selected_ui_d = json.load(f) UI_D.ui_d_sから読み込みに変更
+                    self.selected_ui_d = UI_D.ui_d_s[ClickedItemParentParent_Name]
                     ClickedItem_d = self.selected_ui_d[ClickedItemParent_Name][ClickedItem_Name]
                     self.list_selected_ctrl[0] = ClickedItemParentParent_Name
                     self.list_selected_ctrl[1] = ClickedItemParent_Name
@@ -152,23 +164,31 @@ class MainWindow(wx.Frame):
                                 need_len = row_len - d_len
                                 self.CtrlInfoGrid.DeleteRows(need_len)
                     #self.CtrlInfoGrid.Bind(wx.grid.EVT_GRID_CELL_CHANGED,self.CtrlInfoGrid_Clicked())
-                    self.CtrlInfoGrid.SetColSize(0, 50)
-                    count = 0
-                    for PropKind in ClickedItem_d:
-                        if PropKind != "event":
-                            self.CtrlInfoGrid.SetRowLabelValue(count, PropKind)
-                            if PropKind == "position" or PropKind == "size":
-                                self.CtrlInfoGrid.SetCellValue(
-                                    count, 0, str(ClickedItem_d[PropKind]["X"])+","+str(ClickedItem_d[PropKind]["Y"]))
-                            else:
-                                self.CtrlInfoGrid.SetCellValue(
-                                    count, 0, str(ClickedItem_d[PropKind]))
-                            count += 1
+                    self.Current_InfoGrid_d = {"winname":ClickedItemParentParent_Name,"ctrlkind":ClickedItemParent_Name,"ctrlname":ClickedItem_Name}
+                    self.Set_data_to_CtrlInfoGrid(ClickedItem_d)
                             
             else:
                 # 選択した物はウインドウの名前
                 # ウインドウの情報を表示
                 a = 1
+    def Set_data_to_CtrlInfoGrid(self,ClickedItem_d):
+        self.CtrlInfoGrid.SetColSize(0, 50)
+        count = 0
+        for PropKind in ClickedItem_d:
+            if PropKind != "event":
+                self.CtrlInfoGrid.SetRowLabelValue(count, PropKind)
+                if PropKind == "position" or PropKind == "size":
+                    self.CtrlInfoGrid.SetCellValue(
+                        count, 0, str(ClickedItem_d[PropKind]["X"])+","+str(ClickedItem_d[PropKind]["Y"]))
+                else:
+                    self.CtrlInfoGrid.SetCellValue(
+                        count, 0, str(ClickedItem_d[PropKind]))
+                count += 1
+    def Update_CtrlInfoGrid(self):
+        #const.update_main_window_showdataがTrueの時に実行される
+        print("Updata_CtrlInfoGrid")
+        if self.Current_InfoGrid_d is not None:
+            self.Set_data_to_CtrlInfoGrid(UI_D.ui_d_s[self.Current_InfoGrid_d["winname"]][self.Current_InfoGrid_d["ctrlkind"]][self.Current_InfoGrid_d["ctrlname"]])
     def CtrlInfoGrid_Clicked(self,event):
         print("Clicked")
         tmp = event.GetId()
@@ -241,6 +261,6 @@ class MainWindow(wx.Frame):
     def Make_MakeCS_Clicked(self):
         conv = convert.Convert("gui.json","test")
     def Make_Build_Clicked(self):
-        pass
+        bld = build.Build_app()
     def Ctrl_AddCtrl_Clicked(self):
         pass

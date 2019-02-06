@@ -5,9 +5,13 @@ import const
 #@numba.jit
 def MakeCtrlProps_CS(ui_d, kind):
     output = ""
+    
     ui_d_a = ui_d[kind]
     for ctrlname in ui_d_a:
         target = ui_d_a[ctrlname]
+        #this.buttonExit = new System.Windows.Forms.Button();
+        output += "            this.%s = new System.Windows.Forms.%s();\n" % (
+            ctrlname, kind)
         output += "            this.%s.Name = \"%s\";\n" % (
             ctrlname, ctrlname)
         for prop_kind in target:
@@ -19,13 +23,13 @@ def MakeCtrlProps_CS(ui_d, kind):
 #@numba.jit
 def GetProp_CS(prop_kind, target):
     rtn = ""
-    if prop_kind == "positionX":
+    if prop_kind == "position":
         PosX = str(target["position"]["X"])
         PosY = str(target["position"]["Y"])
         rtn = ".Location = new System.Drawing.Point(%s,%s);" % (PosX, PosY)
     elif prop_kind == "text":
         text = str(target["text"])
-        rtn = ".Text = \"%s\"" % text
+        rtn = ".Text = \"%s\";" % text
     elif prop_kind == "":
         pass
     rtn += "\n"
@@ -35,9 +39,10 @@ def GetProp_CS(prop_kind, target):
 def Defin_Ctrls_CS(ui_d):
     rtn = ""
     for ctrl_kind in ui_d:
-        for ctrl_name in ui_d[ctrl_kind]:
-            ctrl_kind_t = Get_ctrl_kind_t_CS(ctrl_kind)
-            rtn += "        private System.Windows.Forms.%s %s;\n"%(ctrl_kind_t,ctrl_name)
+        if ctrl_kind != "Window":
+            for ctrl_name in ui_d[ctrl_kind]:
+                ctrl_kind_t = Get_ctrl_kind_t_CS(ctrl_kind)
+                rtn += "        private System.Windows.Forms.%s %s;\n"%(ctrl_kind_t,ctrl_name)
     return rtn
 
 #JSONで管理している名前と違ってもいいようにここでC#での名前に変換する
@@ -51,16 +56,15 @@ class Convert():
     def __init__(self, target_file, project_name):
         print("Converting "+target_file)
         self.starttime = time.time()
-        self.target_file = target_file
-        f = open(self.target_file, 'r')
+        f = open(const.project_dir + const.pathsep + target_file, 'r')
         self.ui_d = json.load(f)
         f.close()
         self.Convert_CS_WinForm(target_file, project_name)
     #  C#・WindowsForm向けのソースの生成メソッド
     def Convert_CS_WinForm(self, target_file, project_name):
-        target_file = target_file.replace(".json", "")
+        target_file = target_file.replace(".gson", "")
         target_window_name = target_file
-        target_file = target_file + ".Designer.cs"
+        target_file = const.project_dir + const.pathsep + target_file + ".Designer.cs"
     
         wo = """namespace %s
 {
@@ -71,7 +75,8 @@ class Convert():
             \n""" % (project_name, target_window_name)
 
         for kind in const.UIs:
-            wo += MakeCtrlProps_CS(self.ui_d, kind)
+            if kind in self.ui_d:
+                wo += MakeCtrlProps_CS(self.ui_d, kind)
         wo += "        }\n"
         wo += Defin_Ctrls_CS(self.ui_d)
         wo += """    }

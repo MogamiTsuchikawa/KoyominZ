@@ -1,6 +1,6 @@
 import UI_D,wx,os,const,json
 
-class NewProject(wx.Frame):
+class NewProject(wx.Dialog):
     def __init__(self,parent):
         print("NewProject!")
         wx.Frame.__init__(self,parent,title="KoyominZ [New Project]")
@@ -23,23 +23,24 @@ class NewProject(wx.Frame):
         proj_path = f_path +const.pathsep + "projects"+ const.pathsep + name
         print(proj_path)
         os.makedirs(proj_path)
-        
-        imp_d = {}
-        imp_d["aboutthis"] = {"name" : name , "kind" : "dotnetcore_winform"}
-        imp_d["sourcefiles"] = {"cs" : "Program,Form1","gson":"Form1"}
-        imp_f = open(proj_path + os.pathsep + "PROJECT.imp",'w')
-        json.dump(imp_d,imp_f,indent=4)
-        imp_f.close()
-        Form1_f = open(proj_path + os.pathsep + "Form1.gson",'w')
-        Form1_d = UI_D.Make_ui_d("Form1")
-        json.dump(Form1_d,Form1_f,indent=4)
-        Form1_f.close()
         const.project_dir = proj_path
         const.project_name = name
         const.project_kind = "dotnetcore_winform"
-        os.system("cd "+proj_path)
-        os.system("dotnet new winform -o "+name)
-        self.Close(True)
-        wx.Exit()
+        os.system("cd "+proj_path+" & dotnet new winform -o "+name)
+        imp_d = {}
+        imp_d["aboutthis"] = {"name" : name , "kind" : "dotnetcore_winform"}
+        imp_d["sourcefiles"] = {"cs" : "Program,Form1","gson":"Form1"}
+        imp_f = open(proj_path + const.pathsep + "PROJECT.imp",'w')
+        json.dump(imp_d,imp_f,indent=4)
+        imp_f.close()
+        Form1_f = open(proj_path + const.pathsep + "Form1.gson",'w')
+        Form1_d = UI_D.Make_ui_d("Form1")
+        json.dump(Form1_d,Form1_f,indent=4)
+        Form1_f.close()
+        
+        self.Close()
+        print("NewProject_CLOSE")
+        self.Destroy()
+        #wx.Exit()
 
 

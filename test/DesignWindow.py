@@ -1,13 +1,13 @@
 import wx,copy,json
-import const
+import const,UI_D
 import format_check
 
 class Design_Window(wx.Frame):
     def __init__(self, parent, winname):
         self.Move_Object = None
         self.Move_Object_Pos = None
-        self.f = open(const.project_dir+"\\"+winname+".gson", 'r')
-        self.ui_d = json.load(self.f)
+        self.f = open(const.project_dir+const.pathsep+winname+".gson", 'r')
+        self.ui_d = UI_D.ui_d_s[winname]
         self.DW_panel = None
         self.btn = []
         self.btn_name = []
@@ -27,7 +27,8 @@ class Design_Window(wx.Frame):
         self.Ctrls = {"Button": self.btn, "TextBox": self.textbox, "Label": self.label,"CheckBox": self.checkbox, "ComboBox": self.combobox, "ProgressBar": self.progressbar}
         self.Ctrls_Name = {"Button": self.btn_name, "TextBox": self.textbox_name, "Label": self.label_name,"CheckBox": self.checkbox_name, "ComboBox": self.combobox_name, "ProgressBar": self.progressbar_name}
         for Ctrl_t in self.Ctrls:
-            self.Set_UI(Ctrl_t, self.Ctrls[Ctrl_t])
+            if Ctrl_t in self.ui_d:
+                self.Set_UI(Ctrl_t, self.Ctrls[Ctrl_t])
         # Windowの設定
         if "size" in self.ui_d["Window"]:
             self.SetSize(self.ui_d["Window"]["size"]["X"],self.ui_d["Window"]["size"]["Y"])
@@ -91,6 +92,7 @@ class Design_Window(wx.Frame):
                     self.ui_d[ctrl_kind][ctrl_name]["position"]["X"] = self.Move_Object_Pos[0]
                     self.ui_d[ctrl_kind][ctrl_name]["position"]["Y"] = self.Move_Object_Pos[1]
                     t_index = -1
+                    const.update_main_window_showdata =True #MainWindowのプロパティ表示を更新
             self.Move_Object = None
 
     def Right_Down(self, event):
