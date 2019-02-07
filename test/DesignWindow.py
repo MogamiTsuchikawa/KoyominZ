@@ -4,6 +4,7 @@ import format_check
 
 class Design_Window(wx.Frame):
     def __init__(self, parent, winname):
+        self.winname = winname
         self.Move_Object = None
         self.Move_Object_Pos = None
         self.f = open(const.project_dir+const.pathsep+winname+".gson", 'r')
@@ -132,6 +133,6 @@ class Design_Window(wx.Frame):
 
     
     def Save(self):
-        f = open("gui.json",'w')
+        f = open(const.project_dir+const.pathsep+self.winname+".gson",'w')
         json.dump(self.ui_d,f,indent=4)
         f.close()

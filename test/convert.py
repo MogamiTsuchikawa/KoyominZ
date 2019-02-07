@@ -52,6 +52,17 @@ def Get_ctrl_kind_t_CS(ctrl_kind):
     i = const.UIs.index(ctrl_kind)
     rtn = const.UIs_t_CS[i]
     return rtn
+def Make_FormCode(ui_d):
+    rtn = ""
+    rtn += "    this.ClientSize = new System.Drawing.Size(%s, %s);\n"%(str(ui_d["Window"]["size"]["X"]),str(ui_d["Window"]["size"]["Y"]))
+    rtn += "    this.Name = \"%s\";\n"%(ui_d["Window"]["name"])
+    rtn += "    this.Text = \"%s\";\n"%(ui_d["Window"]["text"])
+    for ctrl_kind in const.UIs:
+        for ctrl_name in ui_d[ctrl_kind]:
+            rtn += "    this.Controls.Add(this.%s);\n"%(ctrl_name)
+        rtn += "    \n"
+        return rtn
+
 class Convert():
     def __init__(self, target_file, project_name):
         print("Converting "+target_file)
@@ -77,6 +88,7 @@ class Convert():
         for kind in const.UIs:
             if kind in self.ui_d:
                 wo += MakeCtrlProps_CS(self.ui_d, kind)
+                wo += Make_FormCode(self.ui_d)
         wo += "        }\n"
         wo += Defin_Ctrls_CS(self.ui_d)
         wo += """    }

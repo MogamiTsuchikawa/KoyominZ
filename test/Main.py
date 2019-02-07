@@ -249,7 +249,9 @@ class MainWindow(wx.Frame):
     def File_Open_Clicked(self):
         pass
     def File_Save_Clicked(self):
-        self.Preview_Window.Save()
+        #self.Preview_Window.Save()
+        for winname in self.window_list:
+            self.Preview_Windows[winname].Save()
     def File_SaveAs_Clicked(self):
         pass
     def Edit_Cut_Clicked(self):

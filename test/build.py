@@ -9,4 +9,4 @@ def Build_dotnetcore_winform():
         convert.Convert(gson_f+".gson",const.project_name)
         os.remove(const.project_dir + const.pathsep + const.project_name + const.pathsep + gson_f + ".Designer.cs")
         shutil.move(const.project_dir + const.pathsep + gson_f + ".Designer.cs",const.project_dir + const.pathsep + const.project_name + const.pathsep)
-    os.system("cd " + const.project_dir + const.pathsep + const.project_name + " & dotnet run")
+    os.system("cd " + const.project_dir + const.pathsep + const.project_name + " & dotnet build")
