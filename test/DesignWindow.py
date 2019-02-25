@@ -29,6 +29,7 @@ class Design_Window(wx.Frame):
         self.Ctrls_Name = {"Button": self.btn_name, "TextBox": self.textbox_name, "Label": self.label_name,"CheckBox": self.checkbox_name, "ComboBox": self.combobox_name, "ProgressBar": self.progressbar_name}
         for Ctrl_t in self.Ctrls:
             if Ctrl_t in self.ui_d:
+                
                 self.Set_UI(Ctrl_t, self.Ctrls[Ctrl_t])
         # Windowの設定
         if "size" in self.ui_d["Window"]:
@@ -36,7 +37,58 @@ class Design_Window(wx.Frame):
         if "text" in self.ui_d["Window"]:
             self.SetTitle(self.ui_d["Window"]["text"])
         self.DW_panel.Bind(wx.EVT_MOTION, self.OnMouseMove)
+    def Set_Ctrl(self,Target_Ctrl_kind,Target_Ctrl_name,mode,Target_Ctrl_obj):
+        ui_d_c = {}
+        if mode == "ADD":
+            i = 1
+            while i != -1:
+                new_name = Target_Ctrl_kind + str(i)
+                if new_name in self.ui_d[Target_Ctrl_kind]:
+                    Target_Ctrl_name = new_name
+                    i = -1
+                else:
+                    i += 1
+            if Target_Ctrl_kind == "Button" or Target_Ctrl_kind == "Label" or Target_Ctrl_kind == "CheckBox":
+                ui_d_c[Target_Ctrl_name] = {"position":{"X":10,"Y":10},"text":Target_Ctrl_name}
+            #他のコントロール分も後で書く
+        else:
+            ui_d_c = self.ui_d[Target_Ctrl_kind]
+
+        #コントロール追加部分
+        for name in ui_d_c:
+            ui_dcd = ui_d_c[name]
+            if Target_Ctrl_kind == "Button":
+                Target_Ctrl_obj.append(wx.Button(
+                    self.DW_panel, -1,label=ui_dcd["text"], pos=(ui_dcd["position"]["X"], ui_dcd["position"]["Y"])))
+                self.btn_name.append(name)
+            elif Target_Ctrl_kind == "TextBox":
+                Target_Ctrl_obj.append(wx.TextCtrl(
+                    self.DW_panel, -1, pos=(ui_dcd["position"]["X"], ui_dcd["position"]["Y"])))
+                self.textbox_name.append(name)
+            elif Target_Ctrl_kind == "Label":
+                Target_Ctrl_obj.append(wx.StaticText(
+                    self.DW_panel, -1,label=ui_dcd["text"], pos=(ui_dcd["position"]["X"], ui_dcd["position"]["Y"])))
+                self.label_name.append(name)
+            elif Target_Ctrl_kind == "CheckBox":
+                Target_Ctrl_obj.append(wx.CheckBox(
+                    self.DW_panel, -1,label=ui_dcd["text"], pos=(ui_dcd["position"]["X"], ui_dcd["position"]["Y"])))
+                self.checkbox_name.append(name)
+            elif Target_Ctrl_kind == "ComboBox":
+                Target_Ctrl_obj.append(wx.ComboBox(
+                    self.DW_panel, -1, pos=(ui_dcd["position"]["X"], ui_dcd["position"]["Y"])))
+                self.combobox_name.append(name)
+            elif Target_Ctrl_kind == "ProgressBar":
+                Target_Ctrl_obj.append(wx.Gauge(
+                    self.DW_panel, -1, pos=(ui_dcd["position"]["X"], ui_dcd["position"]["Y"])))
+                self.progressbar_name.append(name)
+            
+
+
     def Set_UI(self,Target_UIkind, Target_UIs):
+        #
+        #      削除予定
+        #   Set_Ctrlメソッド完成時にSet_UIは初期化時にSet_Ctrlへ渡す用のメソッドに変更。
+        #
         i = 0
         for b in self.ui_d[Target_UIkind]:
             T_UI_b = self.ui_d[Target_UIkind][b]
@@ -69,7 +121,9 @@ class Design_Window(wx.Frame):
             if("sizeX" in T_UI_b):
                 Target_UIs[i].SetSize(float(T_UI_b["sizeX"]),float(T_UI_b["sizeY"]))
             i += 1
-
+        #
+        #     ここまで
+        #
     def Left_Down(self, event):
 
         Clicked_Object = event.GetEventObject()
@@ -130,9 +184,10 @@ class Design_Window(wx.Frame):
                 target_UI_o.SetSize(float(c_size_s[0]),float(c_size_s[1]))
             else:
                 return rtn
-
-    
-    def Save(self):
-        f = open(const.project_dir+const.pathsep+self.winname+".gson",'w')
-        json.dump(self.ui_d,f,indent=4)
-        f.close()
+    def Add_Ctrl(self,ctrl_kind):
+        self.Set_UI(ctrl_kind, self.Ctrls[ctrl_kind])
+    # 使うかよくワカランのでコメントアウト
+    #def Save(self):
+    #    f = open(const.project_dir+const.pathsep+self.winname+".gson",'w')
+    #    json.dump(self.ui_d,f,indent=4)
+    #    f.close()
