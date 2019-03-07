@@ -15,6 +15,12 @@
                 "X":60,
                 "Y":20
             },
+            "background_color":{
+                "type":"RGB",
+                "R":0,
+                "G":0,
+                "B":0
+            },
             "event":{
                 "ON_CLICK":"btn_click"
             }
@@ -24,7 +30,11 @@
                 "X":235,
                 "Y":114
             },
-            "text": "btn1"
+            "text": "btn1",
+            "background_color":{
+                "type":"sys_color",
+                "color":"red"
+            }
         }
     },
     "TextBox": {
