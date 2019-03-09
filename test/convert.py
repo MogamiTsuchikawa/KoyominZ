@@ -40,14 +40,22 @@ def GetProp_CS(prop_kind, target):
             RGB_d = [str(target["background_color"]["R"]),str(target["background_color"]["G"]),str(target["background_color"]["B"])]
             rtn = ".BackColor = Color.FromArgb(%s,%s,%s);" % (RGB_d[0],RGB_d[1],RGB_d[2])
         elif bg_color_type == "sys_color":
-            target["background_color"]["color"] = target["background_color"]["color"].capitalize()
             if target["background_color"]["color"] in const.System_Color:
                 rtn = ".BackColor = Color.%s;" % target["background_color"]["color"]
             else:
                 pass
                 #Erorr返し
     elif prop_kind == "foreground_color":
-        pass
+        bg_color_type = target["foreground_color"]["type"]
+        if bg_color_type == "RGB":
+            RGB_d = [str(target["foreground_color"]["R"]),str(target["foreground_color"]["G"]),str(target["foreground_color"]["B"])]
+            rtn = ".ForeColor = Color.FromArgb(%s,%s,%s);" % (RGB_d[0],RGB_d[1],RGB_d[2])
+        elif bg_color_type == "sys_color":
+            if target["foreground_color"]["color"] in const.System_Color:
+                rtn = ".ForeColor = Color.%s;" % target["foreground_color"]["color"]
+            else:
+                pass
+                #Erorr返し
     elif prop_kind == "font":
         #フォント指定
         pass
