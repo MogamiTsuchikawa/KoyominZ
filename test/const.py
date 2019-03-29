@@ -8,9 +8,9 @@ pathsep = "/"
 update_main_window_showdata = False
 
 UIs = ["Button", "TextBox", "Label",
-               "CheckBox", "ComboBox", "ProgressBar"]
+        "CheckBox", "ComboBox", "ProgressBar"]
 UIs_t_CS = ["Button", "TextBox", "Label",
-               "CheckBox", "ComboBox", "ProgressBar"]
+        "CheckBox", "ComboBox", "ProgressBar"]
 
 System_Color = ["AliceBlue","AntiqueWhite","Aqua"
         ,"Aquamarine","Azure","Beige","Bisque","Black"

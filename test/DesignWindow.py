@@ -184,6 +184,24 @@ class Design_Window(wx.Frame):
                 target_UI_o.SetSize(float(c_size_s[0]),float(c_size_s[1]))
             else:
                 return rtn
+        elif Change_Kind == "background_color":
+            rtn = format_check.format_check(Target_UI_kind,Change_Kind,Change_Value)
+            if rtn == "OK":
+                color_d = Change_Value.split(",")# sys_color,Blue  や RGB,R値,B値,G値　のように来る
+                if color_d[0] == "sys_color":
+                    target_UI_o.SetBackgroundColour(color_d[1])
+                if color_d[0] == "RGB":
+                    target_UI_o.SetBackgroundColour(wx.Colour(int(color_d[1]),int(color_d[2]),int(color_d[3])))
+        elif Change_Kind == "foreround_color":
+            rtn = format_check.format_check(Target_UI_kind,Change_Kind,Change_Value)
+            if rtn == "OK":
+                color_d = Change_Value.split(",")# sys_color,Blue  や RGB,R値,B値,G値　のように来る
+                if color_d[0] == "sys_color":
+                    target_UI_o.SetForegroundColour(color_d[1])
+                if color_d[0] == "RGB":
+                    target_UI_o.SetForegroundColour(wx.Colour(int(color_d[1]),int(color_d[2]),int(color_d[3])))
+
+
     def Add_Ctrl(self,ctrl_kind):
         self.Set_UI(ctrl_kind, self.Ctrls[ctrl_kind])
     # 使うかよくワカランのでコメントアウト
